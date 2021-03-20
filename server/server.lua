@@ -51,45 +51,31 @@ end
 
 -- Get exports from server side
 exports('discord', function(message, id, id2, color, channel)
+	-- checking if export is used correctly
+	local _message = message
+	
+	if message == nil then print("^1Error: JD_Logs Export. Invalid message.^0") return end
+	if id == nil or id == "PLAYER_ID" or not tonumber(id) then print("^1Error: JD_Logs Export. Invalid player id.^0") return end
+	if id == nil or id2 == "PLAYER_2_ID" or not tonumber(id2) then print("^1Error: JD_Logs Export. Invalid second player id.^0") return end
+	if color == nil then print("^1Error: JD_Logs Export. Invalid color.^0") return end
+	if channel == nil or channel == "" then print("^1Error: JD_Logs Export. Invalid channel.^0") return end
 
 	-- Check if hex or decimal color is used
-	if string.find(color,"#") then
-		_color = tonumber(color:gsub("#",""),16)
-	else
-		_color = color
-	end
-
-	if id ~= 0 then
-		local ids = ExtractIdentifiers(id)
-		local postal = getPlayerLocation(id)
-		if Config.postal then _postal = "\n**Nearest Postal:** ".. postal .."" else _postal = "" end
-		if Config.discordID then if ids.discord ~= "" then _discordID ="\n**Discord ID:** <@" ..ids.discord:gsub("discord:", "")..">" else _discordID = "\n**Discord ID:** N/A" end else _discordID = "" end
-		if Config.steamID then if ids.steam ~= "" then _steamID ="\n**Steam ID:** " ..ids.steam.."" else _steamID = "\n**Steam ID:** N/A" end else _steamID = "" end
-		if Config.steamURL then  if ids.steam ~= "" then _steamURL ="\nhttps://steamcommunity.com/profiles/" ..tonumber(ids.steam:gsub("steam:", ""),16).."" else _steamURL = "\n**Steam URL:** N/A" end else _steamURL = "" end
-		if Config.license then if ids.license ~= "" then _license ="\n**License:** " ..ids.license else _license = "\n**License :** N/A" end else _license = "" end
-		if Config.IP then if ids.ip ~= "" then _ip ="\n**IP:** " ..ids.ip else _ip = "\n**IP :** N/A" end else _ip = "" end
-		if Config.playerID then _playerID ="\n**Player ID:** " ..id.."" else _playerID = "" end
-		player1 = message..'\n'.._playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._ip
-		_message = player1
-	else
-		_message = message
-	end
+	if string.find(color,"#") then _color = tonumber(color:gsub("#",""),16) else _color = color end
 
 	if id2 ~= 0 then
-		local ids2 = ExtractIdentifiers(id2)
-		local postal2 = getPlayerLocation(id2)
-		if Config.postal then _postal2 = "\n**Nearest Postal:** ".. postal2 .."" else _postal2 = "" end
-		if Config.discordID then if ids2.discord ~= "" then _discordID2 ="\n**Discord ID:** <@" ..ids2.discord:gsub("discord:", "")..">" else _discordID2 = "\n**Discord ID:** N/A" end else _discordID2 = "" end
-		if Config.steamID then if ids2.steam ~= "" then _steamID2 ="\n**Steam ID:** " ..ids2.steam.."" else _steamID2 = "\n**Steam ID:** N/A" end else _steamID2 = "" end
-		if Config.steamURL then  if ids2.steam ~= "" then _steamURL2 ="\nhttps://steamcommunity.com/profiles/" ..tonumber(ids2.steam:gsub("steam:", ""),16).."" else _steamURL2 = "\n**Steam URL:** N/A" end else _steamURL2 = "" end
-		if Config.license then if ids2.license ~= "" then _license2 ="\n**License:** " ..ids2.license else _license2 = "\n**License :** N/A" end else _license2 = "" end
-		if Config.IP then if ids2.ip ~= "" then _ip2 ="\n**IP:** " ..ids2.ip else _ip2 = "\n**IP :** N/A" end else _ip2 = "" end
-		if Config.playerID then _playerID2 ="\n**Player ID:** " ..id2.."" else _playerID2 = "" end
-		player2 = _playerID2..''.. _postal2 ..''.. _discordID2..''.._steamID2..''.._steamURL2..''.._license2..''.._ip2
-		_message = player1..'\n'..player2
+		local player1 = GetPlayerDetails(id)
+		local player2 = GetPlayerDetails(id2)
+		_message = message..'\n'..player1..'\n'..player2
+	else
+		if id == 0 then
+			_message = message
+		else
+			local player1 = GetPlayerDetails(id)
+			_message = message..'\n'..player1
+		end
 	end
-
-    discordLog(_message, _color, channel)
+   discordLog(_message, _color,  channel)
 end)
 
 -- Sending message to the All Logs channel and to the channel it has listed
@@ -104,135 +90,71 @@ end
 
 -- Send message when Player connects to the server.
 AddEventHandler("playerConnecting", function(name, setReason, deferrals)
-	local ids = ExtractIdentifiers(source)
-	if Config.discordID then if ids.discord ~= "" then _discordID ="\n**Discord ID:** <@" ..ids.discord:gsub("discord:", "")..">" else _discordID = "\n**Discord ID:** N/A" end else _discordID = "" end
-	if Config.steamID then if ids.steam ~= "" then _steamID ="\n**Steam ID:** " ..ids.steam.."" else _steamID = "\n**Steam ID:** N/A" end else _steamID = "" end
-	if Config.steamURL then  if ids.steam ~= "" then _steamURL ="\nhttps://steamcommunity.com/profiles/" ..tonumber(ids.steam:gsub("steam:", ""),16).."" else _steamURL = "\n**Steam URL:** N/A" end else _steamID = "" end
-	if Config.license then if ids.license ~= "" then _license ="\n**License:** " ..ids.license else _license = "\n**License :** N/A" end else _license = "" end
-	if Config.IP then if ids.ip ~= "" then _ip ="\n**IP:** " ..ids.ip else _ip = "\n**IP :** N/A" end else _ip = "" end
-	discordLog('**' .. sanitize(GetPlayerName(source)) .. '** is connecting to the server.'.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._ip..'', joinColor, 'joins')
+	local info = GetPlayerDetails(source)
+	discordLog('**' .. sanitize(GetPlayerName(source)) .. '** is connecting to the server.\n'..info, joinColor, 'joins')
 end)
 
 -- Send message when Player disconnects from the server
 AddEventHandler('playerDropped', function(reason)
-	local ids = ExtractIdentifiers(source)
-	local postal = getPlayerLocation(source)
-	if Config.postal then _postal = "\n**Nearest Postal:** ".. postal .."" else _postal = "" end
-	if Config.discordID then if ids.discord ~= "" then _discordID ="\n**Discord ID:** <@" ..ids.discord:gsub("discord:", "")..">" else _discordID = "\n**Discord ID:** N/A" end else _discordID = "" end
-	if Config.steamID then if ids.steam ~= "" then _steamID ="\n**Steam ID:** " ..ids.steam.."" else _steamID = "\n**Steam ID:** N/A" end else _steamID = "" end
-	if Config.steamURL then  if ids.steam ~= "" then _steamURL ="\nhttps://steamcommunity.com/profiles/" ..tonumber(ids.steam:gsub("steam:", ""),16).."" else _steamURL = "\n**Steam URL:** N/A" end else _steamID = "" end
-	if Config.license then if ids.license ~= "" then _license ="\n**License:** " ..ids.license else _license = "\n**License :** N/A" end else _license = "" end
-	if Config.IP then if ids.ip ~= "" then _ip ="\n**IP:** " ..ids.ip else _ip = "\n**IP :** N/A" end else _ip = "" end
-	if Config.playerID then _playerID ="\n**Player ID:** " ..source.."" else _playerID = "" end
+	local info = GetPlayerDetails(source)
 	discordLog('**' .. sanitize(GetPlayerName(source)) .. '** has left the server. (Reason: ' .. reason .. ')'.._playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._ip..'', leaveColor, 'leaving')
 end)
 
 -- Send message when Player creates a chat message (Does not show commands)
 AddEventHandler('chatMessage', function(source, name, msg)
-	local ids = ExtractIdentifiers(source)
-	local postal = getPlayerLocation(source)
-	if Config.postal then _postal = "\n**Nearest Postal:** ".. postal .."" else _postal = "" end
-	if Config.discordID then if ids.discord ~= "" then _discordID ="\n**Discord ID:** <@" ..ids.discord:gsub("discord:", "")..">" else _discordID = "\n**Discord ID:** N/A" end else _discordID = "" end
-	if Config.steamID then if ids.steam ~= "" then _steamID ="\n**Steam ID:** " ..ids.steam.."" else _steamID = "\n**Steam ID:** N/A" end else _steamID = "" end
-	if Config.steamURL then  if ids.steam ~= "" then _steamURL ="\nhttps://steamcommunity.com/profiles/" ..tonumber(ids.steam:gsub("steam:", ""),16).."" else _steamURL = "\n**Steam URL:** N/A" end else _steamID = "" end
-	if Config.license then if ids.license ~= "" then _license ="\n**License:** " ..ids.license else _license = "\n**License :** N/A" end else _license = "" end
-	if Config.IP then if ids.ip ~= "" then _ip ="\n**IP:** " ..ids.ip else _ip = "\n**IP :** N/A" end else _ip = "" end
-	if Config.playerID then _playerID ="\n**Player ID:** " ..source.."" else _playerID = "" end
-
-	discordLog('**' .. sanitize(GetPlayerName(source)) .. '**: ``' .. msg .. '``'.._playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._ip..'', chatColor, 'chat')
+	local info = GetPlayerDetails(source)
+	discordLog('**' .. sanitize(GetPlayerName(source)) .. '**: ``' .. msg .. '``\n'..info, chatColor, 'chat')
 end)
 
 -- Send message when Player died (including reason/killer check) (Not always working)
 RegisterServerEvent('playerDied')
 AddEventHandler('playerDied',function(id,player,killer,DeathReason,Weapon)
-	local ids = ExtractIdentifiers(source)
-	local postal = getPlayerLocation(source)
-	if DeathReason then _DeathReason = "`"..DeathReason.."`" else _DeathReason = "`died`" end
-	if Weapon then _Weapon = ""..Weapon.."" else _Weapon = "" end
-	if Config.postal then _postal = "\n**Nearest Postal:** ".. postal .."" else _postal = "" end
-	if Config.discordID then if ids.discord ~= "" then _discordID ="\n**Discord ID:** <@" ..ids.discord:gsub("discord:", "")..">" else _discordID = "\n**Discord ID:** N/A" end else _discordID = "" end
-	if Config.steamID then if ids.steam ~= "" then _steamID ="\n**Steam ID:** " ..ids.steam.."" else _steamID = "\n**Steam ID:** N/A" end else _steamID = "" end
-	if Config.steamURL then  if ids.steam ~= "" then _steamURL ="\nhttps://steamcommunity.com/profiles/" ..tonumber(ids.steam:gsub("steam:", ""),16).."" else _steamURL = "\n**Steam URL:** N/A" end else _steamID = "" end
-	if Config.license then if ids.license ~= "" then _license ="\n**License:** " ..ids.license else _license = "\n**License :** N/A" end else _license = "" end
-	if Config.IP then if ids.ip ~= "" then _ip ="\n**IP:** " ..ids.ip else _ip = "\n**IP :** N/A" end else _ip = "" end
-	if Config.playerID then _playerID ="\n**Player ID:** " ..source.."" else _playerID = "" end
-
+	local info = GetPlayerDetails(source)
 	if id == 1 then  -- Suicide/died
-        discordLog('**' .. sanitize(GetPlayerName(source)) .. '** '.._DeathReason..''.._Weapon..''.._playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._ip..'', deathColor, 'deaths') -- sending to deaths channel
+        discordLog('**' .. sanitize(GetPlayerName(source)) .. '** '.._DeathReason..''.._Weapon..'\n'..info, deathColor, 'deaths') -- sending to deaths channel
 	elseif id == 2 then -- Killed by other player
-	local ids2 = ExtractIdentifiers(killer)
-	local postal2 = getPlayerLocation(killer)
-	if Config.postal then _postal2 = "\n**Nearest Postal:** ".. postal2 .."" else _postal2 = "" end
-	if Config.discordID then if ids2.discord ~= "" then _KillDiscordID ="\n**Discord ID:** <@" ..ids2.discord:gsub("discord:", "")..">" else _KillDiscordID = "\n**Discord ID:** N/A" end else _KillDiscordID = "" end
-	if Config.steamID then if ids2.steam ~= "" then _KillSteamID ="\n**Steam ID:** " ..ids2.steam.."" else _KillSteamID = "\n**Steam ID:** N/A" end else _KillSteamID = "" end
-	if Config.steamURL then  if ids2.steam ~= "" then _KillSteamURL ="\nhttps://steamcommunity.com/profiles/" ..tonumber(ids2.steam:gsub("steam:", ""),16).."" else _KillSteamURL = "\n**Steam URL:** N/A" end else _steamID = "" end
-	if Config.license then if ids2.license ~= "" then _license2 ="\n**License:** " ..ids2.license else _license2 = "\n**License :** N/A" end else _license2 = "" end
-	if Config.IP then if ids2.ip ~= "" then _ip2 ="\n**IP:** " ..ids2.ip else _ip2 = "\n**IP :** N/A" end else _ip2 = "" end
-	if Config.playerID then _killPlayerID ="\n**Player ID:** " ..killer.."" else _killPlayerID = "" end
-		discordLog('**' .. GetPlayerName(killer) .. '** '.._DeathReason..' ' .. GetPlayerName(source).. ' `('.._Weapon..')`\n\n**[Player INFO]**'.._playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._ip..'\n\n**[Killer INFO]**'.._killPlayerID..''.. _postal2 ..''.. _KillDiscordID..''.._KillSteamID..''.._KillSteamURL..''.._license2..''.._ip2..'', deathColor, 'deaths') -- sending to deaths channel
+	local _killer = GetPlayerDetails(killer)
+		discordLog('**' .. GetPlayerName(killer) .. '** '.._DeathReason..' ' .. GetPlayerName(source).. ' `('.._Weapon..')`\n\n**[Player INFO]**'.._playerID..''.. _postal ..''.. info..'\n\n**[Killer INFO]**'.._killer, deathColor, 'deaths') -- sending to deaths channel
 	else -- When gets killed by something else
-        discordLog('**' .. sanitize(GetPlayerName(source)) .. '** `died`'.._playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._ip..'', deathColor, 'deaths') -- sending to deaths channel
+        discordLog('**' .. sanitize(GetPlayerName(source)) .. '** `died`\n'.. info, deathColor, 'deaths') -- sending to deaths channel
 	end
 end)
 
 -- Send message when Player fires a weapon
 RegisterServerEvent('playerShotWeapon')
 AddEventHandler('playerShotWeapon', function(weapon)
-	local ids = ExtractIdentifiers(source)
-	local postal = getPlayerLocation(source)
-	if Config.postal then _postal = "\n**Nearest Postal:** ".. postal .."" else _postal = "" end
-	if Config.discordID then if ids.discord ~= "" then _discordID ="\n**Discord ID:** <@" ..ids.discord:gsub("discord:", "")..">" else _discordID = "\n**Discord ID:** N/A" end else _discordID = "" end
-	if Config.steamID then if ids.steam ~= "" then _steamID ="\n**Steam ID:** " ..ids.steam.."" else _steamID = "\n**Steam ID:** N/A" end else _steamID = "" end
-	if Config.steamURL then  if ids.steam ~= "" then _steamURL ="\nhttps://steamcommunity.com/profiles/" ..tonumber(ids.steam:gsub("steam:", ""),16).."" else _steamURL = "\n**Steam URL:** N/A" end else _steamID = "" end
-	if Config.license then if ids.license ~= "" then _license ="\n**License:** " ..ids.license else _license = "\n**License :** N/A" end else _license = "" end
-	if Config.IP then if ids.ip ~= "" then _ip ="\n**IP:** " ..ids.ip else _ip = "\n**IP :** N/A" end else _ip = "" end
-	if Config.playerID then _playerID ="\n**Player ID:** " ..source.."" else _playerID = "" end
+	local info = GetPlayerDetails(source)
 	if Config.weaponLog then
-		discordLog('**' .. sanitize(GetPlayerName(source))  .. '** fired a `' .. weapon .. '`'.._playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._ip..'', shootingColor, 'shooting')
+		discordLog('**' .. sanitize(GetPlayerName(source))  .. '** fired a `' .. weapon .. '`\n'..info, shootingColor, 'shooting')
     end
 end)
 
 -- Getting exports from clientside
 RegisterServerEvent('ClientDiscord')
 AddEventHandler('ClientDiscord', function(message, id, id2, color, channel)
+	local _message = message
+	
+	if message == nil then print("^1Error: JD_Logs Export. Invalid message.^0") return end
+	if id == nil or id == "PLAYER_ID" or not tonumber(id) then print("^1Error: JD_Logs Export. Invalid player id.^0") return end
+	if id == nil or id2 == "PLAYER_2_ID" or not tonumber(id2) then print("^1Error: JD_Logs Export. Invalid second player id.^0") return end
+	if color == nil then print("^1Error: JD_Logs Export. Invalid color.^0") return end
+	if channel == nil or channel == "" then print("^1Error: JD_Logs Export. Invalid channel.^0") return end
 
 	-- Check if hex or decimal color is used
-	if string.find(color,"#") then
-		_color = tonumber(color:gsub("#",""),16)
-	else
-		_color = color
-	end
-
-	if id ~= 0 then
-		local ids = ExtractIdentifiers(id)
-		local postal = getPlayerLocation(id)
-		if Config.postal then _postal = "\n**Nearest Postal:** ".. postal .."" else _postal = "" end
-		if Config.discordID then if ids.discord ~= "" then _discordID ="\n**Discord ID:** <@" ..ids.discord:gsub("discord:", "")..">" else _discordID = "\n**Discord ID:** N/A" end else _discordID = "" end
-		if Config.steamID then if ids.steam ~= "" then _steamID ="\n**Steam ID:** " ..ids.steam.."" else _steamID = "\n**Steam ID:** N/A" end else _steamID = "" end
-		if Config.steamURL then  if ids.steam ~= "" then _steamURL ="\nhttps://steamcommunity.com/profiles/" ..tonumber(ids.steam:gsub("steam:", ""),16).."" else _steamURL = "\n**Steam URL:** N/A" end else _steamURL = "" end
-		if Config.license then if ids.license ~= "" then _license ="\n**License:** " ..ids.license else _license = "\n**License :** N/A" end else _license = "" end
-		if Config.IP then if ids.ip ~= "" then _ip ="\n**IP:** " ..ids.ip else _ip = "\n**IP :** N/A" end else _ip = "" end
-		if Config.playerID then _playerID ="\n**Player ID:** " ..id.."" else _playerID = "" end
-		player1 = message..'\n'.._playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._ip
-		_message = player1
-	else
-		_message = message
-	end
+	if string.find(color,"#") then _color = tonumber(color:gsub("#",""),16) else _color = color end
 
 	if id2 ~= 0 then
-		local ids2 = ExtractIdentifiers(id2)
-		local postal2 = getPlayerLocation(id2)
-		if Config.postal then _postal2 = "\n**Nearest Postal:** ".. postal2 .."" else _postal2 = "" end
-		if Config.discordID then if ids2.discord ~= "" then _discordID2 ="\n**Discord ID:** <@" ..ids2.discord:gsub("discord:", "")..">" else _discordID2 = "\n**Discord ID:** N/A" end else _discordID2 = "" end
-		if Config.steamID then if ids2.steam ~= "" then _steamID2 ="\n**Steam ID:** " ..ids2.steam.."" else _steamID2 = "\n**Steam ID:** N/A" end else _steamID2 = "" end
-		if Config.steamURL then  if ids2.steam ~= "" then _steamURL2 ="\nhttps://steamcommunity.com/profiles/" ..tonumber(ids2.steam:gsub("steam:", ""),16).."" else _steamURL2 = "\n**Steam URL:** N/A" end else _steamURL2 = "" end
-		if Config.license then if ids2.license ~= "" then _license2 ="\n**License:** " ..ids2.license else _license2 = "\n**License :** N/A" end else _license2 = "" end
-		if Config.IP then if ids2.ip ~= "" then _ip2 ="\n**IP:** " ..ids2.ip else _ip2 = "\n**IP :** N/A" end else _ip2 = "" end
-		if Config.playerID then _playerID2 ="\n**Player ID:** " ..id2.."" else _playerID2 = "" end
-		player2 = _playerID2..''.. _postal2 ..''.. _discordID2..''.._steamID2..''.._steamURL2..''.._license2..''.._ip2
-		_message = player1..'\n'..player2
+		local player1 = GetPlayerDetails(id)
+		local player2 = GetPlayerDetails(id2)
+		_message = message..'\n'..player1..'\n'..player2
+	else
+		if id == 0 then
+			_message = message
+		else
+			local player1 = GetPlayerDetails(id)
+			_message = message..'\n'..player1
+		end
 	end
-
    discordLog(_message, _color,  channel)
 end)
 
@@ -247,11 +169,19 @@ AddEventHandler('onResourceStart', function (resourceName)
     discordLog('**' .. resourceName .. '** has been started.', resourceColor, 'resources')
 end)
 
-RegisterServerEvent('JDlogs:GetIdentifiers')
-AddEventHandler('JDlogs:GetIdentifiers', function(src)
-	local ids = ExtractIdentifiers(src)
-	return ids
-end)
+function GetPlayerDetails(src)
+	local player_id = src
+	local ids = ExtractIdentifiers(player_id)
+	local postal = getPlayerLocation(player_id)
+	if Config.postal then _postal = "\n**Nearest Postal:** ".. postal .."" else _postal = "" end
+	if Config.discordID then if ids.discord ~= "" then _discordID ="\n**Discord ID:** <@" ..ids.discord:gsub("discord:", "")..">" else _discordID = "\n**Discord ID:** N/A" end else _discordID = "" end
+	if Config.steamID then if ids.steam ~= "" then _steamID ="\n**Steam ID:** " ..ids.steam.."" else _steamID = "\n**Steam ID:** N/A" end else _steamID = "" end
+	if Config.steamURL then  if ids.steam ~= "" then _steamURL ="\nhttps://steamcommunity.com/profiles/" ..tonumber(ids.steam:gsub("steam:", ""),16).."" else _steamURL = "\n**Steam URL:** N/A" end else _steamURL = "" end
+	if Config.license then if ids.license ~= "" then _license ="\n**License:** " ..ids.license else _license = "\n**License :** N/A" end else _license = "" end
+	if Config.IP then if ids.ip ~= "" then _ip ="\n**IP:** " ..ids.ip else _ip = "\n**IP :** N/A" end else _ip = "" end
+	if Config.playerID then _playerID ="\n**Player ID:** " ..player_id.."" else _playerID = "" end
+	return _playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._ip
+end
 
 function ExtractIdentifiers(src)
     local identifiers = {
