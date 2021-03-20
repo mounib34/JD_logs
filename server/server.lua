@@ -74,6 +74,7 @@ exports('discord', function(message, id, id2, color, channel)
 			local player1 = GetPlayerDetails(id)
 			_message = message..'\n'..player1
 		end
+
 	end
    discordLog(_message, _color,  channel)
 end)
