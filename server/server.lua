@@ -74,7 +74,6 @@ exports('discord', function(message, id, id2, color, channel)
 			local player1 = GetPlayerDetails(id)
 			_message = message..'\n'..player1
 		end
-
 	end
    discordLog(_message, _color,  channel)
 end)
@@ -109,13 +108,14 @@ end)
 
 -- Send message when Player died (including reason/killer check) (Not always working)
 RegisterServerEvent('playerDied')
-AddEventHandler('playerDied',function(id,player,killer,DeathReason,Weapon)
-	local info = GetPlayerDetails(source)
+AddEventHandler('playerDied',function(id,player,killer,DeathReason, Weapon)
+	if Weapon == nil then _Weapon = "" else _Weapon = "`"..Weapon.."`" end
+	local info = GetPlayerDetails(player)
 	if id == 1 then  -- Suicide/died
-        discordLog('**' .. sanitize(GetPlayerName(source)) .. '** '.._DeathReason..''.._Weapon..'\n'..info, deathColor, 'deaths') -- sending to deaths channel
+        discordLog('**' .. sanitize(GetPlayerName(source)) .. '** '..DeathReason..' '.._Weapon..'\n'..info, deathColor, 'deaths') -- sending to deaths channel
 	elseif id == 2 then -- Killed by other player
 	local _killer = GetPlayerDetails(killer)
-		discordLog('**' .. GetPlayerName(killer) .. '** '.._DeathReason..' ' .. GetPlayerName(source).. ' `('.._Weapon..')`\n\n**[Player INFO]**'.._playerID..''.. _postal ..''.. info..'\n\n**[Killer INFO]**'.._killer, deathColor, 'deaths') -- sending to deaths channel
+		discordLog('**' .. GetPlayerName(killer) .. '** '..DeathReason..' ' .. GetPlayerName(source).. ' `('.._Weapon..')`\n\n**[Player INFO]**'.._playerID..''.. _postal ..''.. info..'\n\n**[Killer INFO]**'.._killer, deathColor, 'deaths') -- sending to deaths channel
 	else -- When gets killed by something else
         discordLog('**' .. sanitize(GetPlayerName(source)) .. '** `died`\n'.. info, deathColor, 'deaths') -- sending to deaths channel
 	end
@@ -246,8 +246,8 @@ local x, y = table.unpack(playerCoords)
 end
 
 -- version check
-Citizen.CreateThread(
-	function()
+Citizen.CreateThread( function()
+		SetConvarServerInfo("JD_logs", "V"..Config.versionCheck)
 		local vRaw = LoadResourceFile(GetCurrentResourceName(), 'version.json')
 		if vRaw and Config.versionCheck then
 			local v = json.decode(vRaw)

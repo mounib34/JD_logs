@@ -137,11 +137,11 @@ Citizen.CreateThread(function()
 
 	while true do
 		Citizen.Wait(0)
-		if IsEntityDead(PlayerPedId()) then
+		if IsEntityDead(GetPlayerPed(PlayerId())) then
 			Citizen.Wait(0)
-			local PedKiller = GetPedSourceOfDeath(PlayerPedId())
+			local PedKiller = GetPedSourceOfDeath(GetPlayerPed(PlayerId()))
 			local killername = GetPlayerName(PedKiller)
-			DeathCauseHash = GetPedCauseOfDeath(PlayerPedId())
+			DeathCauseHash = GetPedCauseOfDeath(GetPlayerPed(PlayerId()))
 			Weapon = WeaponNames[tostring(DeathCauseHash)]
 
 			if IsEntityAPed(PedKiller) and IsPedAPlayer(PedKiller) then
@@ -189,9 +189,9 @@ Citizen.CreateThread(function()
 			end
 
 			if DeathReason == 'committed suicide' or DeathReason == 'died' then
-				TriggerServerEvent('playerDied',1,PlayerId(),_Killer,DeathReason,Weapon)
+				TriggerServerEvent('playerDied',1,GetPlayerServerId(PlayerId()),0,DeathReason,Weapon)
 			else
-				TriggerServerEvent('playerDied',2,PlayerId(),GetPlayerServerId(Killer),DeathReason,Weapon)
+				TriggerServerEvent('playerDied',2,GetPlayerServerId(PlayerId()),GetPlayerServerId(Killer),DeathReason,Weapon)
 			end
 			Killer = nil
 			DeathReason = nil
@@ -212,7 +212,7 @@ Citizen.CreateThread(function()
 
 		if IsPedShooting(playerped) then
 			TriggerServerEvent('playerShotWeapon', WeaponNames[tostring(GetSelectedPedWeapon(playerped))])
-			Citizen.Wait(1000)
+			Citizen.Wait(5000)
 		end
 	end
 
