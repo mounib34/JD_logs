@@ -89,6 +89,3 @@ local webhooks = {
 ```
 
 ### My Discord: https://discord.gg/m4BvmkG
-
-### Images
-![JD_logs_Image](http://jokedevil.com/img/JD_logs.png)
