@@ -1,7 +1,7 @@
-author 'JokeDevil'
-description 'FXServer logs to Discord (https://www.jokedevil.com/)'
-version '1.1.6'
-url 'https://jokedevil.com'
+author 'Prefech'
+description 'FXServer logs to Discord (https://prefech.com/)'
+version '1.2.0'
+url 'https://prefech.com'
 
 -- Config
 server_script 'config.lua'
@@ -11,7 +11,6 @@ server_script 'server/server.lua'
 
 --Client Scripts
 client_script 'client/client.lua'
-
 
 file 'postals.json'
 postal_file 'postals.json'

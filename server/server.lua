@@ -11,43 +11,13 @@ AddEventHandler("discordLogs", function(message, color, channel)
     discordLog(message, color, channel)
 end)
 
--- Define default colors
-if string.find(Config.joinColor,"#") then
-	local joinColor = tonumber(Config.joinColor:gsub("#",""),16)
-else
-	local joinColor = Config.joinColor
+for k, v in pairs(Config.BaseColors) do
+	if string.find(v,"#") then
+		Config.BaseColors[k] = tonumber(v:gsub("#",""),16)
+	else
+		Config.BaseColors[k] = v
+	end
 end
-
-if string.find(Config.leaveColor,"#") then
-	local leaveColor = tonumber(Config.leaveColor:gsub("#",""),16)
-else
-	local leaveColor = Config.leaveColor
-end
-
-if string.find(Config.chatColor,"#") then
-	local chatColor = tonumber(Config.chatColor:gsub("#",""),16)
-else
-	local chatColor = Config.chatColor
-end
-
-if string.find(Config.shootingColor,"#") then
-	local shootingColor = tonumber(Config.shootingColor:gsub("#",""),16)
-else
-	local shootingColor = Config.shootingColor
-end
-
-if string.find(Config.deathColor,"#") then
-	local deathColor = tonumber(Config.deathColor:gsub("#",""),16)
-else
-	local deathColor = Config.deathColor
-end
-
-if string.find(Config.resourceColor,"#") then
-	local resourceColor = tonumber(Config.resourceColor:gsub("#",""),16)
-else
-	local resourceColor = Config.resourceColor
-end
-
 
 -- Get exports from server side
 exports('discord', function(message, id, id2, color, channel)
@@ -64,60 +34,214 @@ exports('discord', function(message, id, id2, color, channel)
 	if string.find(color,"#") then _color = tonumber(color:gsub("#",""),16) else _color = color end
 
 	if id2 ~= 0 then
-		local player1 = GetPlayerDetails(id)
-		local player2 = GetPlayerDetails(id2)
-		_message = message..'\n'..player1..'\n'..player2
+		DualPlayerLogs(message, _color, id, id2, channel)
 	else
 		if id == 0 then
-			_message = message
+			HidePlayerDetails(message, _color, channel)
 		else
-			local player1 = GetPlayerDetails(id)
-			_message = message..'\n'..player1
+			SinglePlayerLogs(message, _color, id, channel)
 		end
 	end
-   discordLog(_message, _color,  channel)
 end)
 
--- Sending message to the All Logs channel and to the channel it has listed
-function discordLog(message, color, channel)
-  if Config.AllLogs then
-	PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) end, 'POST', json.encode({username = Config.username, embeds = {{["color"] = color, ["author"] = {["name"] = Config.communtiyName,["icon_url"] = Config.communtiyLogo}, ["description"] = "".. message .."",["footer"] = {["text"] = "© JokeDevil.com - "..os.date("%x %X %p"),["icon_url"] = "https://www.jokedevil.com/img/logo.png",},}}, avatar_url = Config.avatar}), { ['Content-Type'] = 'application/json' })
-  end
-	PerformHttpRequest(Config.webhooks[channel], function(err, text, headers) end, 'POST', json.encode({username = Config.username, embeds = {{["color"] = color, ["author"] = {["name"] = Config.communtiyName,["icon_url"] = Config.communtiyLogo}, ["description"] = "".. message .."",["footer"] = {["text"] = "© JokeDevil.com - "..os.date("%x %X %p"),["icon_url"] = "https://www.jokedevil.com/img/logo.png",},}}, avatar_url = Config.avatar}), { ['Content-Type'] = 'application/json' })
+function HidePlayerDetails(message, color, channel)
+	if Config.AllLogs then
+		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) end, 'POST', json.encode({
+			username = Config.username, 
+			embeds = {{
+				["color"] = color, 
+				["author"] = {
+					["name"] = Config.communtiyName,
+					["icon_url"] = Config.communtiyLogo
+				},
+				["title"] = GetTitle(channel),
+				["description"] = "".. message .."",
+				["footer"] = {
+					["text"] = Config.FooterText.." • "..os.date("%x %X %p"),
+					["icon_url"] = Config.FooterIcon,
+				},
+			}}, 
+			avatar_url = Config.avatar
+		}), { 
+			['Content-Type'] = 'application/json' 
+		})
+  	end
+  	PerformHttpRequest(Config.webhooks[channel], function(err, text, headers) end, 'POST', json.encode({
+		username = Config.username, 
+		embeds = {{
+			["color"] = color, 
+			["author"] = {
+				["name"] = Config.communtiyName,
+				["icon_url"] = Config.communtiyLogo
+			},
+			["title"] = GetTitle(channel),
+			["description"] = "".. message .."",
+			["footer"] = {
+				["text"] = Config.FooterText.." • "..os.date("%x %X %p"),
+				["icon_url"] = Config.FooterIcon,
+			},
+		}}, 
+		avatar_url = Config.avatar
+	}), { 
+		['Content-Type'] = 'application/json' 
+	})
+end
+
+function SinglePlayerLogs(message, color, field1, channel)
+	local PlayerDetails = GetPlayerDetails(field1)
+	if Config.AllLogs then
+		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) end, 'POST', json.encode({
+			username = Config.username, 
+			embeds = {{
+				["color"] = color, 
+				["author"] = {
+					["name"] = Config.communtiyName,
+					["icon_url"] = Config.communtiyLogo
+				},
+				["title"] = GetTitle(channel),
+				["description"] = "".. message .."",
+				["footer"] = {
+					["text"] = Config.FooterText.." • "..os.date("%x %X %p"),
+					["icon_url"] = Config.FooterIcon,
+				},
+				["fields"] = {
+					{
+						["name"] = "Player Details: "..GetPlayerName(field1),
+						["value"] = PlayerDetails,
+						["inline"] = Config.InlineFields
+					}
+				},
+			}}, 
+			avatar_url = Config.avatar
+		}), { 
+			['Content-Type'] = 'application/json' 
+		})
+  	end
+  	PerformHttpRequest(Config.webhooks[channel], function(err, text, headers) end, 'POST', json.encode({
+		username = Config.username, 
+		embeds = {{
+			["color"] = color, 
+			["author"] = {
+				["name"] = Config.communtiyName,
+				["icon_url"] = Config.communtiyLogo
+			},
+			["title"] = GetTitle(channel),
+			["description"] = "".. message .."",
+			["footer"] = {
+				["text"] = Config.FooterText.." • "..os.date("%x %X %p"),
+				["icon_url"] = Config.FooterIcon,
+			},
+			["fields"] = {
+				{
+					["name"] = "Player Details: "..GetPlayerName(field1),
+					["value"] = PlayerDetails,
+					["inline"] = Config.InlineFields
+				}
+			},
+		}}, 
+		avatar_url = Config.avatar
+	}), { 
+		['Content-Type'] = 'application/json' 
+	})
+end
+
+function DualPlayerLogs(message, color, field1, field2, channel)
+	local PlayerDetails = GetPlayerDetails(field1)
+	local PlayerDetails2 = GetPlayerDetails(field2)
+	if Config.AllLogs then
+		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) end, 'POST', json.encode({
+			username = Config.username, 
+			embeds = {{
+				["color"] = color, 
+				["author"] = {
+					["name"] = Config.communtiyName,
+					["icon_url"] = Config.communtiyLogo
+				},
+				["title"] = GetTitle(channel),
+				["description"] = "".. message .."",
+				["footer"] = {
+					["text"] = Config.FooterText.." • "..os.date("%x %X %p"),
+					["icon_url"] = Config.FooterIcon,
+				},
+				["fields"] = {
+					{
+						["name"] = "Player Details: "..GetPlayerName(field1),
+						["value"] = PlayerDetails,
+						["inline"] = Config.InlineFields
+					},
+					{
+						["name"] = "Player Details: "..GetPlayerName(field2),
+						["value"] = PlayerDetails2,
+						["inline"] = Config.InlineFields
+					}
+				},
+			}}, 
+			avatar_url = Config.avatar
+		}), { 
+			['Content-Type'] = 'application/json' 
+		})
+  	end
+  	PerformHttpRequest(Config.webhooks[channel], function(err, text, headers) end, 'POST', json.encode({
+		username = Config.username, 
+		embeds = {{
+			["color"] = color, 
+			["author"] = {
+				["name"] = Config.communtiyName,
+				["icon_url"] = Config.communtiyLogo
+			}, 
+			["title"] = GetTitle(channel),
+			["description"] = "".. message .."",
+			["footer"] = {
+				["text"] = Config.FooterText.." • "..os.date("%x %X %p"),
+				["icon_url"] = Config.FooterIcon,
+			},
+			["timestamp"] = os.date("%x %X %p"),
+			["fields"] = {
+				{
+					["name"] = "Player Details: "..GetPlayerName(field1),
+					["value"] = PlayerDetails,
+					["inline"] = Config.InlineFields
+				},
+				{
+					["name"] = "Player Details: "..GetPlayerName(field2),
+					["value"] = PlayerDetails2,
+					["inline"] = Config.InlineFields
+				}
+			},
+		}}, 
+		avatar_url = Config.avatar
+	}), { 
+		['Content-Type'] = 'application/json' 
+	})
 end
 
 -- Event Handlers
 
 -- Send message when Player connects to the server.
 AddEventHandler("playerConnecting", function(name, setReason, deferrals)
-	local info = GetPlayerDetails(source)
-	discordLog('**' .. sanitize(GetPlayerName(source)) .. '** is connecting to the server.\n'..info, joinColor, 'joins')
+	SinglePlayerLogs('**' ..GetPlayerName(source).. '** is connecting to the server.', Config.BaseColors['joins'], source, 'joins')
 end)
 
 -- Send message when Player disconnects from the server
 AddEventHandler('playerDropped', function(reason)
-	local info = GetPlayerDetails(source)
-	discordLog('**' .. sanitize(GetPlayerName(source)) .. '** has left the server. (Reason: ' .. reason .. ')'.._playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._ip..'', leaveColor, 'leaving')
+	SinglePlayerLogs('**' ..GetPlayerName(source).. '** has left the server. (Reason: ' .. reason .. ')', Config.BaseColors['leaving'], source, 'leaving')
 end)
 
 -- Send message when Player creates a chat message (Does not show commands)
 AddEventHandler('chatMessage', function(source, name, msg)
-	local info = GetPlayerDetails(source)
-	discordLog('**' .. sanitize(GetPlayerName(source)) .. '**: ``' .. msg .. '``\n'..info, chatColor, 'chat')
+	SinglePlayerLogs('**' .. sanitize(GetPlayerName(source)) .. '**: `' .. msg..'`', Config.BaseColors['chat'], source, 'chat')
 end)
 
 -- Send message when Player died (including reason/killer check) (Not always working)
 RegisterServerEvent('playerDied')
 AddEventHandler('playerDied',function(id,player,killer,DeathReason, Weapon)
 	if Weapon == nil then _Weapon = "" else _Weapon = "`"..Weapon.."`" end
-	local info = GetPlayerDetails(player)
 	if id == 1 then  -- Suicide/died
-        discordLog('**' .. sanitize(GetPlayerName(source)) .. '** '..DeathReason..' '.._Weapon..'\n'..info, deathColor, 'deaths') -- sending to deaths channel
+        SinglePlayerLogs('**' .. sanitize(GetPlayerName(source)) .. '** `'..DeathReason..'` '.._Weapon, Config.BaseColors['deaths'], source, 'deaths') -- sending to deaths channel
 	elseif id == 2 then -- Killed by other player
-	local _killer = GetPlayerDetails(killer)
-		discordLog('**' .. GetPlayerName(killer) .. '** '..DeathReason..' ' .. GetPlayerName(source).. ' `('.._Weapon..')`\n\n**[Player INFO]**'.._playerID..''.. _postal ..''.. info..'\n\n**[Killer INFO]**'.._killer, deathColor, 'deaths') -- sending to deaths channel
+		DualPlayerLogs('**' .. GetPlayerName(killer) .. '** '..DeathReason..' ' .. GetPlayerName(source).. ' `('.._Weapon..')`', Config.BaseColors['deaths'], killer, source, 'deaths') -- sending to deaths channel
 	else -- When gets killed by something else
-        discordLog('**' .. sanitize(GetPlayerName(source)) .. '** `died`\n'.. info, deathColor, 'deaths') -- sending to deaths channel
+        SinglePlayerLogs('**' .. GetPlayerName(source) .. '** `died`', Config.BaseColors['deaths'], source, 'deaths') -- sending to deaths channel
 	end
 end)
 
@@ -126,7 +250,7 @@ RegisterServerEvent('playerShotWeapon')
 AddEventHandler('playerShotWeapon', function(weapon)
 	local info = GetPlayerDetails(source)
 	if Config.weaponLog then
-		discordLog('**' .. sanitize(GetPlayerName(source))  .. '** fired a `' .. weapon .. '`\n'..info, shootingColor, 'shooting')
+		SinglePlayerLogs('**' .. GetPlayerName(source)  .. '** fired a `' .. weapon .. '`', Config.BaseColors['shooting'], source, 'shooting')
     end
 end)
 
@@ -145,29 +269,25 @@ AddEventHandler('ClientDiscord', function(message, id, id2, color, channel)
 	if string.find(color,"#") then _color = tonumber(color:gsub("#",""),16) else _color = color end
 
 	if id2 ~= 0 then
-		local player1 = GetPlayerDetails(id)
-		local player2 = GetPlayerDetails(id2)
-		_message = message..'\n'..player1..'\n'..player2
+		DualPlayerLogs(message, _color, id, id2, channel)
 	else
 		if id == 0 then
-			_message = message
+			HidePlayerDetails(message, _color, channel)
 		else
-			local player1 = GetPlayerDetails(id)
-			_message = message..'\n'..player1
+			SinglePlayerLogs(message, _color, id, channel)
 		end
 	end
-   discordLog(_message, _color,  channel)
 end)
 
 -- Send message when a resource is being stopped
 AddEventHandler('onResourceStop', function (resourceName)
-    discordLog('**' .. resourceName .. '** has been stopped.', resourceColor, 'resources')
+    HidePlayerDetails('**' .. resourceName .. '** has been stopped.', Config.BaseColors['resources'], 'resources')
 end)
 
 -- Send message when a resource is being started
 AddEventHandler('onResourceStart', function (resourceName)
     Wait(100)
-    discordLog('**' .. resourceName .. '** has been started.', resourceColor, 'resources')
+    HidePlayerDetails('**' .. resourceName .. '** has been started.', Config.BaseColors['resources'], 'resources')
 end)
 
 function GetPlayerDetails(src)
@@ -245,6 +365,18 @@ local x, y = table.unpack(playerCoords)
 	return _nearest
 end
 
+function GetTitle(channel)
+	if Config.TitleIcon[channel] then
+		return Config.TitleIcon[channel].." "..firstToUpper(channel)
+	else
+		return "❓ "..firstToUpper(channel)
+	end
+end
+
+function firstToUpper(str)
+    return (str:gsub("^%l", string.upper))
+end
+
 -- version check
 Citizen.CreateThread( function()
 		SetConvarServerInfo("JD_logs", "V"..Config.versionCheck)
@@ -252,7 +384,7 @@ Citizen.CreateThread( function()
 		if vRaw and Config.versionCheck then
 			local v = json.decode(vRaw)
 			PerformHttpRequest(
-				'https://raw.githubusercontent.com/JokeDevil/JD_logs/master/version.json',
+				'https://raw.githubusercontent.com/Prefech/JD_logs/master/version.json',
 				function(code, res, headers)
 					if code == 200 then
 						local rv = json.decode(res)
