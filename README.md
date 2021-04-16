@@ -1,3 +1,7 @@
+<h1 align="center">
+	JOIN THE DISCORD FOR SUPPORT
+</h1>
+
 <img src="https://i.gyazo.com/3894b03d4351bcb566ec85afc7f9b231.png">
 
 <h4 align="center">
