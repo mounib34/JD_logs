@@ -215,6 +215,180 @@ function DualPlayerLogs(message, color, field1, field2, channel)
 	})
 end
 
+function PluginHidePlayerDetails(message, color, channel)
+	if string.find(color,"#") then _color = tonumber(color:gsub("#",""),16) else _color = color end
+	if Config.AllLogs then
+		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) end, 'POST', json.encode({
+			username = Config.username, 
+			embeds = {{
+				["color"] = _color, 
+				["author"] = {
+					["name"] = Config.communtiyName,
+					["icon_url"] = Config.communtiyLogo
+				},
+				["title"] = Config.Plugins[channel].icon.." "..channel,
+				["description"] = "".. message .."",
+				["footer"] = {
+					["text"] = Config.FooterText.." • "..os.date("%x %X %p"),
+					["icon_url"] = Config.FooterIcon,
+				},
+			}}, 
+			avatar_url = Config.avatar
+		}), { 
+			['Content-Type'] = 'application/json' 
+		})
+  	end
+  	PerformHttpRequest(Config.Plugins[channel].webhook, function(err, text, headers) end, 'POST', json.encode({
+		username = Config.username, 
+		embeds = {{
+			["color"] = _color, 
+			["author"] = {
+				["name"] = Config.communtiyName,
+				["icon_url"] = Config.communtiyLogo
+			},
+			["title"] = Config.Plugins[channel].icon.." "..channel,
+			["description"] = "".. message .."",
+			["footer"] = {
+				["text"] = Config.FooterText.." • "..os.date("%x %X %p"),
+				["icon_url"] = Config.FooterIcon,
+			},
+		}}, 
+		avatar_url = Config.avatar
+	}), { 
+		['Content-Type'] = 'application/json' 
+	})
+end
+
+function PluginSinglePlayerLogs(message, color, field1, channel)
+	if string.find(color,"#") then _color = tonumber(color:gsub("#",""),16) else _color = color end
+	local PlayerDetails = GetPlayerDetails(field1)
+	if Config.AllLogs then
+		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) end, 'POST', json.encode({
+			username = Config.username, 
+			embeds = {{
+				["color"] = _color, 
+				["author"] = {
+					["name"] = Config.communtiyName,
+					["icon_url"] = Config.communtiyLogo
+				},
+				["title"] = Config.Plugins[channel].icon.." "..channel,
+				["description"] = "".. message .."",
+				["footer"] = {
+					["text"] = Config.FooterText.." • "..os.date("%x %X %p"),
+					["icon_url"] = Config.FooterIcon,
+				},
+				["fields"] = {
+					{
+						["name"] = "Player Details: "..GetPlayerName(field1),
+						["value"] = PlayerDetails,
+						["inline"] = Config.InlineFields
+					}
+				},
+			}}, 
+			avatar_url = Config.avatar
+		}), { 
+			['Content-Type'] = 'application/json' 
+		})
+  	end
+  	PerformHttpRequest(Config.Plugins[channel].webhook, function(err, text, headers) end, 'POST', json.encode({
+		username = Config.username, 
+		embeds = {{
+			["color"] = _color, 
+			["author"] = {
+				["name"] = Config.communtiyName,
+				["icon_url"] = Config.communtiyLogo
+			},
+			["title"] = Config.Plugins[channel].icon.." "..channel,
+			["description"] = "".. message .."",
+			["footer"] = {
+				["text"] = Config.FooterText.." • "..os.date("%x %X %p"),
+				["icon_url"] = Config.FooterIcon,
+			},
+			["fields"] = {
+				{
+					["name"] = "Player Details: "..GetPlayerName(field1),
+					["value"] = PlayerDetails,
+					["inline"] = Config.InlineFields
+				}
+			},
+		}}, 
+		avatar_url = Config.avatar
+	}), { 
+		['Content-Type'] = 'application/json' 
+	})
+end
+
+function PluginDualPlayerLogs(message, color, field1, field2, channel)
+	if string.find(color,"#") then _color = tonumber(color:gsub("#",""),16) else _color = color end
+	local PlayerDetails = GetPlayerDetails(field1)
+	local PlayerDetails2 = GetPlayerDetails(field2)
+	if Config.AllLogs then
+		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) end, 'POST', json.encode({
+			username = Config.username, 
+			embeds = {{
+				["color"] = _color, 
+				["author"] = {
+					["name"] = Config.communtiyName,
+					["icon_url"] = Config.communtiyLogo
+				},
+				["title"] = Config.Plugins[channel].icon.." "..channel,
+				["description"] = "".. message .."",
+				["footer"] = {
+					["text"] = Config.FooterText.." • "..os.date("%x %X %p"),
+					["icon_url"] = Config.FooterIcon,
+				},
+				["fields"] = {
+					{
+						["name"] = "Player Details: "..GetPlayerName(field1),
+						["value"] = PlayerDetails,
+						["inline"] = Config.InlineFields
+					},
+					{
+						["name"] = "Player Details: "..GetPlayerName(field2),
+						["value"] = PlayerDetails2,
+						["inline"] = Config.InlineFields
+					}
+				},
+			}}, 
+			avatar_url = Config.avatar
+		}), { 
+			['Content-Type'] = 'application/json' 
+		})
+  	end
+  	PerformHttpRequest(Config.Plugins[channel].webhook, function(err, text, headers) end, 'POST', json.encode({
+		username = Config.username, 
+		embeds = {{
+			["color"] = _color, 
+			["author"] = {
+				["name"] = Config.communtiyName,
+				["icon_url"] = Config.communtiyLogo
+			}, 
+			["title"] = Config.Plugins[channel].icon.." "..channel,
+			["description"] = "".. message .."",
+			["footer"] = {
+				["text"] = Config.FooterText.." • "..os.date("%x %X %p"),
+				["icon_url"] = Config.FooterIcon,
+			},
+			["timestamp"] = os.date("%x %X %p"),
+			["fields"] = {
+				{
+					["name"] = "Player Details: "..GetPlayerName(field1),
+					["value"] = PlayerDetails,
+					["inline"] = Config.InlineFields
+				},
+				{
+					["name"] = "Player Details: "..GetPlayerName(field2),
+					["value"] = PlayerDetails2,
+					["inline"] = Config.InlineFields
+				}
+			},
+		}}, 
+		avatar_url = Config.avatar
+	}), { 
+		['Content-Type'] = 'application/json' 
+	})
+end
+
 -- Event Handlers
 
 -- Send message when Player connects to the server.

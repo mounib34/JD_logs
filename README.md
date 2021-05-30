@@ -22,6 +22,8 @@ This is a server log script for FiveM, which is used to log certain actions that
   - Death Logs (When a player dies/get killed)
   - Shooting Logs (When a player fires a weapon)
   - Resource Logs (When a resouce get started/stopped)
+- Plugin Support
+  - Easy way to add more logs to JD_logs with plugins. (More plugins will be released soon!)
 - Optional custom logs
   - Easy to add with the export.
 
@@ -70,6 +72,9 @@ local webhooks = {
 	<br>
 
 <details>
+<summary>V1.3.0</summary>
+• Added Plugin Support<br>
+</details>
 <summary>V1.1.6</summary>
 • Fixed Death logs issue<br>
 </details>

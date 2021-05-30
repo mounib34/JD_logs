@@ -22,7 +22,7 @@ Config.IP = true					-- set to false to disable IP in the logs
 
 -- Change color of the default embeds here
 -- It used Decimal or Hex color codes. They will both work.
-Config.BaseColors ={		-- For more info have a look at the docs: https://docs.preffech.com
+Config.BaseColors ={		-- For more info have a look at the docs: https://docs.prefech.com
 	chat = "#A1A1A1",				-- Chat Message
 	joins = "#3AF241",				-- Player Connecting
 	leaving = "#F23A3A",			-- Player Disconnected
@@ -32,7 +32,7 @@ Config.BaseColors ={		-- For more info have a look at the docs: https://docs.pre
 }
 
 
-Config.webhooks = {		-- For more info have a look at the docs: https://docs.preffech.com
+Config.webhooks = {		-- For more info have a look at the docs: https://docs.prefech.com
 	all = "DISCORD_WEBHOOK",		-- All logs will be send to this channel
 	chat = "DISCORD_WEBHOOK",		-- Chat Message
 	joins = "DISCORD_WEBHOOK",		-- Player Connecting
@@ -42,7 +42,7 @@ Config.webhooks = {		-- For more info have a look at the docs: https://docs.pref
 	resources = "DISCORD_WEBHOOK",	-- Resource Stopped/Started	
 }
 
-Config.TitleIcon = {		-- For more info have a look at the docs: https://docs.preffech.com
+Config.TitleIcon = {		-- For more info have a look at the docs: https://docs.prefech.com
 	chat = "💬",				-- Chat Message
 	joins = "📥",				-- Player Connecting
 	leaving = "📤",			-- Player Disconnected
@@ -51,7 +51,12 @@ Config.TitleIcon = {		-- For more info have a look at the docs: https://docs.pre
 	resources = "🔧",			-- Resource Stopped/Started	
 }
 
+Config.Plugins = {
+	--["PluginName"] = {color = "#FFFFFF", icon = "🔗", webhook = "DISCORD_WEBHOOK"},
+	["NameChange"] = {color = "#03fc98", icon = "🔗", webhook = "DISCORD_WEBHOOK"},
+}
+
 
  --Debug shizzels :D
 Config.debug = false
-Config.versionCheck = "1.2.0"
+Config.versionCheck = "1.3.0"
