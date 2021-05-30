@@ -195,7 +195,6 @@ function DualPlayerLogs(message, color, field1, field2, channel)
 				["text"] = Config.FooterText.." • "..os.date("%x %X %p"),
 				["icon_url"] = Config.FooterIcon,
 			},
-			["timestamp"] = os.date("%x %X %p"),
 			["fields"] = {
 				{
 					["name"] = "Player Details: "..GetPlayerName(field1),
