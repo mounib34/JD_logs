@@ -7,8 +7,10 @@
 <h4 align="center">
 	<a href="https://github.com/JokeDevil-com/JD_logs/releases/latest" title=""><img alt="Licence" src="https://img.shields.io/github/release/JokeDevil-com/JD_logs.svg"></a>
 	<a href="LICENSE" title=""><img alt="Licence" src="https://img.shields.io/github/license/JokeDevil-com/JD_logs.svg"></a>
-	<a href="https://discord.gg/m4BvmkG" title=""><img alt="Discord Status" src="https://discordapp.com/api/guilds/721339695199682611/widget.png"></a>
+	<a href="https://discord.gg/qyPdHzDKmb" title=""><img alt="Discord Status" src="https://discordapp.com/api/guilds/721339695199682611/widget.png"></a>
 </h4>
+
+https://discord.gg/qyPdHzDKmb
 
 <h4 align="center">
 This is a server log script for FiveM, which is used to log certain actions that are being made in the server.
@@ -69,7 +71,7 @@ local webhooks = {
 ```
 *This can be found in the `config.lua`*
 
-### ❓ For more questions you can join the discord here: https://discord.gg/m4BvmkG
+### ❓ For more questions you can join the discord here: https://discord.gg/qyPdHzDKmb
 
 <details>
   <summary>📦 Change Log</summary>
