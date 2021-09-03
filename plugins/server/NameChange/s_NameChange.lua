@@ -1,5 +1,5 @@
 AddEventHandler('playerConnecting', function(playerName, deferrals)
-    local loadFile = LoadResourceFile(GetCurrentResourceName(), "plugins/server/NameChange/names.json")
+    local loadFile = LoadResourceFile(GetCurrentResourceName(), "./plugins/server/NameChange/names.json")
 	local loadedFile = json.decode(loadFile)
     local steam = ExtractIdentifiers(source).steam
 
@@ -17,5 +17,5 @@ AddEventHandler('playerConnecting', function(playerName, deferrals)
         end
     end
     loadedFile[steam] = GetPlayerName(source)
-    SaveResourceFile(GetCurrentResourceName(), "plugins/server/NameChange/names.json", json.encode(loadedFile), -1)
+    SaveResourceFile(GetCurrentResourceName(), "./plugins/server/NameChange/names.json", json.encode(loadedFile), -1)
 end)
