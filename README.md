@@ -10,7 +10,7 @@
 	<a href="https://discord.gg/qyPdHzDKmb" title=""><img alt="Discord Status" src="https://discordapp.com/api/guilds/721339695199682611/widget.png"></a>
 </h4>
 
-https://discord.gg/qyPdHzDKmb
+https://discord.gg/prefech
 
 <h4 align="center">
 This is a server log script for FiveM, which is used to log certain actions that are being made in the server.
@@ -71,7 +71,7 @@ local webhooks = {
 ```
 *This can be found in the `config.lua`*
 
-### ❓ For more questions you can join the discord here: https://discord.gg/qyPdHzDKmb
+### ❓ For more questions you can join the discord here: https://discord.gg/prefech
 
 <details>
   <summary>📦 Change Log</summary>
