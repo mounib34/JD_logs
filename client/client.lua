@@ -69,7 +69,7 @@ WeaponNames = {
 	[tostring(GetHashKey('WEAPON_GRENADE'))] = 'Grenade',
 	[tostring(GetHashKey('WEAPON_STICKYBOMB'))] = 'Sticky Bomb',
 	[tostring(GetHashKey('WEAPON_PROXMINE'))] = 'Proximity Mine',
-	[tostring(GetHashKey('WAPAON_PIPEBOMB'))] = 'Pipe Bomb',
+	[tostring('0xBA45E8B8')] = 'Pipe Bomb',
 	[tostring(GetHashKey('WEAPON_SMOKEGRENADE'))] = 'Tear Gas',
 	[tostring(GetHashKey('WEAPON_BZGAS'))] = 'BZ Gas',
 	[tostring(GetHashKey('WEAPON_MOLOTOV'))] = 'Molotov',
@@ -96,7 +96,7 @@ WeaponNames = {
 	[tostring(GetHashKey('WEAPON_MUSKET'))] = 'Musket',
 	[tostring(GetHashKey('WEAPON_HEAVYSHOTGUN'))] = 'Heavy Shotgun',
 	[tostring(GetHashKey('WEAPON_DBSHOTGUN'))] = 'Double Barrel Shotgun',
-	[tostring(GetHashKey('WEAPON_SWEEPERSHOTGUN'))] = 'Sweeper Shotgun',
+	[tostring(GetHashKey('WEAPON_AUTOSHOTGUN'))] = 'Sweeper Shotgun',
 
 	[tostring(GetHashKey('WEAPON_REMOTESNIPER'))] = 'Remote Sniper',
 	[tostring(GetHashKey('WEAPON_GRENADELAUNCHER_SMOKE'))] = 'Smoke Grenade Launcher',
