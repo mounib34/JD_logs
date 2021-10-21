@@ -59,4 +59,4 @@ Config.Plugins = {
 
  --Debug shizzels :D
 Config.debug = false
-Config.versionCheck = "1.3.1"
+Config.versionCheck = "1.3.1b"

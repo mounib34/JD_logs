@@ -1,6 +1,6 @@
 author 'Prefech'
 description 'FXServer logs to Discord (https://prefech.com/)'
-version '1.3.1'
+version '1.3.1b'
 url 'https://prefech.com'
 
 -- Config
