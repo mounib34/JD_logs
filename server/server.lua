@@ -46,7 +46,7 @@ end)
 
 function HidePlayerDetails(message, color, channel)
 	if Config.AllLogs then
-		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) if err ~= 204 then print('^3Warn: JD_logs webhook. Invalid "all" webhook') end end, 'POST', json.encode({
+		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) if err ~= 204 and Config.webhooks["all"] ~= "DISCORD_WEBHOOK" and Config.webhooks["all"] ~= "" then print('^3Warn: JD_logs webhook. Invalid "all" webhook') end end, 'POST', json.encode({
 			username = Config.username, 
 			embeds = {{
 				["color"] = color, 
@@ -66,7 +66,7 @@ function HidePlayerDetails(message, color, channel)
 			['Content-Type'] = 'application/json' 
 		})
   	end
-  	PerformHttpRequest(Config.webhooks[channel], function(err, text, headers) if err ~= 204 then print('^3Warn: JD_logs webhook. Invalid "'..channel..'" webhook') end end, 'POST', json.encode({
+  	PerformHttpRequest(Config.webhooks[channel], function(err, text, headers) if err ~= 204 and Config.webhooks[channel] ~= "DISCORD_WEBHOOK" and Config.webhooks[channel] ~= "" then print('^3Warn: JD_logs webhook. Invalid "'..channel..'" webhook') end end, 'POST', json.encode({
 		username = Config.username, 
 		embeds = {{
 			["color"] = color, 
@@ -90,7 +90,7 @@ end
 function SinglePlayerLogs(message, color, field1, channel)
 	local PlayerDetails = GetPlayerDetails(field1)
 	if Config.AllLogs then
-		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) if err ~= 204 then print('^3Warn: JD_logs webhook. Invalid "all" webhook') end end, 'POST', json.encode({
+		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) if err ~= 204 and Config.webhooks["all"] ~= "DISCORD_WEBHOOK" and Config.webhooks["all"] ~= "" then print('^3Warn: JD_logs webhook. Invalid "all" webhook') end end, 'POST', json.encode({
 			username = Config.username, 
 			embeds = {{
 				["color"] = color, 
@@ -117,7 +117,7 @@ function SinglePlayerLogs(message, color, field1, channel)
 			['Content-Type'] = 'application/json' 
 		})
   	end
-  	PerformHttpRequest(Config.webhooks[channel], function(err, text, headers) if err ~= 204 then print('^3Warn: JD_logs webhook. Invalid "'..channel..'" webhook') end end, 'POST', json.encode({
+  	PerformHttpRequest(Config.webhooks[channel], function(err, text, headers) if err ~= 204 and Config.webhooks[channel] ~= "DISCORD_WEBHOOK" and Config.webhooks[channel] ~= "" then print('^3Warn: JD_logs webhook. Invalid "'..channel..'" webhook') end end, 'POST', json.encode({
 		username = Config.username, 
 		embeds = {{
 			["color"] = color, 
@@ -149,7 +149,7 @@ function DualPlayerLogs(message, color, field1, field2, channel)
 	local PlayerDetails = GetPlayerDetails(field1)
 	local PlayerDetails2 = GetPlayerDetails(field2)
 	if Config.AllLogs then
-		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) if err ~= 204 then print('^3Warn: JD_logs webhook. Invalid "all" webhook') end end, 'POST', json.encode({
+		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) if err ~= 204 and Config.webhooks["all"] ~= "DISCORD_WEBHOOK" and Config.webhooks["all"] ~= "" then print('^3Warn: JD_logs webhook. Invalid "all" webhook') end end, 'POST', json.encode({
 			username = Config.username, 
 			embeds = {{
 				["color"] = color, 
@@ -181,7 +181,7 @@ function DualPlayerLogs(message, color, field1, field2, channel)
 			['Content-Type'] = 'application/json' 
 		})
   	end
-  	PerformHttpRequest(Config.webhooks[channel], function(err, text, headers) if err ~= 204 then print('^3Warn: JD_logs webhook. Invalid "'..channel..'" webhook') end end, 'POST', json.encode({
+  	PerformHttpRequest(Config.webhooks[channel], function(err, text, headers) if err ~= 204 and Config.webhooks[channel] ~= "DISCORD_WEBHOOK" and Config.webhooks[channel] ~= "" then print('^3Warn: JD_logs webhook. Invalid "'..channel..'" webhook') end end, 'POST', json.encode({
 		username = Config.username, 
 		embeds = {{
 			["color"] = color, 
@@ -217,7 +217,7 @@ end
 function PluginHidePlayerDetails(message, color, channel)
 	if string.find(color,"#") then _color = tonumber(color:gsub("#",""),16) else _color = color end
 	if Config.AllLogs then
-		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) if err ~= 204 then print('^3Warn: JD_logs webhook. Invalid "all" webhook') end end, 'POST', json.encode({
+		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) if err ~= 204 and Config.webhooks["all"] ~= "DISCORD_WEBHOOK" and Config.webhooks["all"] ~= "" then print('^3Warn: JD_logs webhook. Invalid "all" webhook') end end, 'POST', json.encode({
 			username = Config.username, 
 			embeds = {{
 				["color"] = _color, 
@@ -237,7 +237,7 @@ function PluginHidePlayerDetails(message, color, channel)
 			['Content-Type'] = 'application/json' 
 		})
   	end
-  	PerformHttpRequest(Config.Plugins[channel].webhook, function(err, text, headers) if err ~= 204 then print('^3Warn: JD_logs webhook. Invalid "'..channel..'" webhook') end end, 'POST', json.encode({
+  	PerformHttpRequest(Config.Plugins[channel].webhook, function(err, text, headers) if err ~= 204 and Config.Plugins[channel].webhook ~= "DISCORD_WEBHOOK" and Config.Plugins[channel].webhook ~= "" then print('^3Warn: JD_logs webhook. Invalid "'..channel..'" webhook') end end, 'POST', json.encode({
 		username = Config.username, 
 		embeds = {{
 			["color"] = _color, 
@@ -262,7 +262,7 @@ function PluginSinglePlayerLogs(message, color, field1, channel)
 	if string.find(color,"#") then _color = tonumber(color:gsub("#",""),16) else _color = color end
 	local PlayerDetails = GetPlayerDetails(field1)
 	if Config.AllLogs then
-		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) if err ~= 204 then print('^3Warn: JD_logs webhook. Invalid "all" webhook') end end, 'POST', json.encode({
+		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) if err ~= 204 and Config.webhooks["all"] ~= "DISCORD_WEBHOOK" and Config.webhooks["all"] ~= "" then print('^3Warn: JD_logs webhook. Invalid "all" webhook') end end, 'POST', json.encode({
 			username = Config.username, 
 			embeds = {{
 				["color"] = _color, 
@@ -289,7 +289,7 @@ function PluginSinglePlayerLogs(message, color, field1, channel)
 			['Content-Type'] = 'application/json' 
 		})
   	end
-  	PerformHttpRequest(Config.Plugins[channel].webhook, function(err, text, headers) if err ~= 204 then print('^3Warn: JD_logs webhook. Invalid "'..channel..'" webhook') end end, 'POST', json.encode({
+  	PerformHttpRequest(Config.Plugins[channel].webhook, function(err, text, headers) if err ~= 204 and Config.Plugins[channel].webhook ~= "DISCORD_WEBHOOK" and Config.Plugins[channel].webhook ~= "" then print('^3Warn: JD_logs webhook. Invalid "'..channel..'" webhook') end end, 'POST', json.encode({
 		username = Config.username, 
 		embeds = {{
 			["color"] = _color, 
@@ -322,7 +322,7 @@ function PluginDualPlayerLogs(message, color, field1, field2, channel)
 	local PlayerDetails = GetPlayerDetails(field1)
 	local PlayerDetails2 = GetPlayerDetails(field2)
 	if Config.AllLogs then
-		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) if err ~= 204 then print('^3Warn: JD_logs webhook. Invalid "all" webhook') end end, 'POST', json.encode({
+		PerformHttpRequest(Config.webhooks["all"], function(err, text, headers) if err ~= 204 and Config.webhooks["all"] ~= "DISCORD_WEBHOOK" and Config.webhooks["all"] ~= "" then print('^3Warn: JD_logs webhook. Invalid "all" webhook') end end, 'POST', json.encode({
 			username = Config.username, 
 			embeds = {{
 				["color"] = _color, 
@@ -354,7 +354,7 @@ function PluginDualPlayerLogs(message, color, field1, field2, channel)
 			['Content-Type'] = 'application/json' 
 		})
   	end
-  	PerformHttpRequest(Config.Plugins[channel].webhook, function(err, text, headers) if err ~= 204 then print('^3Warn: JD_logs webhook. Invalid "'..channel..'" webhook') end end, 'POST', json.encode({
+  	PerformHttpRequest(Config.Plugins[channel].webhook, function(err, text, headers) if err ~= 204 and Config.Plugins[channel].webhook ~= "DISCORD_WEBHOOK" and Config.Plugins[channel].webhook ~= "" then print('^3Warn: JD_logs webhook. Invalid "'..channel..'" webhook') end end, 'POST', json.encode({
 		username = Config.username, 
 		embeds = {{
 			["color"] = _color, 
