@@ -552,7 +552,7 @@ end
 
 function getStatus(status, channel)
 	if status == 404 or status == 401 and Config.webhooks[channel] ~= "DISCORD_WEBHOOK" and Config.webhooks[channel] ~= "" then 
-		print('^3Warn: JD_logs webhook. Possible webhook for "'..channel..'" webhook. Status code: '..status)
+		print('^3Warn: JD_logs webhook. Possible invalid webhook for "'..channel..'" webhook. Status code: '..status)
 	end
 end
 
