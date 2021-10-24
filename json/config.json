@@ -1,0 +1,27 @@
+{
+    "allLogs": true,
+    "postals": true,
+    "weaponLog": true,
+    "inlineField": true,
+
+    "playerId": true,
+    "steamId": true,
+    "steamUrl": true,
+    "discordId": true,
+    "license": true,
+    "ip": true,
+
+    "Session": false,
+    "PlayTime": false,
+
+    "nameChangePerms": "jd.staff",
+
+    "userName": "Bot Username Here",
+    "avatar": "https://via.placeholder.com/30x30",
+    "communityName": "Community Name Here",
+    "communityLogo": "https://via.placeholder.com/30x30",
+    "footerText": "2020 - 2021 © Prefech",
+    "footerIcon": "https://via.placeholder.com/30x30",
+
+    "Version": "2.0.0"
+}

@@ -1,0 +1,52 @@
+{
+    "all": { 
+        "webhook": "DISCORD_WEBHOOK",
+        "color": "#A1A1A1",
+        "embed": true
+    },
+    "imageStore": {
+        "webhook": "DISCORD_WEBHOOK"
+    },
+	"chat": { 
+        "webhook": "DISCORD_WEBHOOK", 
+        "icon": "💬", 
+        "color": "#A1A1A1",
+        "embed": true
+    },
+	"joins": { 
+        "webhook": "DISCORD_WEBHOOK", 
+        "icon": "📥", 
+        "color": "#3AF241",
+        "embed": true
+    },
+	"leaving": { 
+        "webhook": "DISCORD_WEBHOOK", 
+        "icon": "📤", 
+        "color": "#F23A3A",
+        "embed": true
+    },
+	"deaths": { 
+        "webhook": "DISCORD_WEBHOOK", 
+        "icon": "💀", 
+        "color": "#000000",
+        "embed": true
+    },
+	"shooting": { 
+        "webhook": "DISCORD_WEBHOOK", 
+        "icon": "🔫", 
+        "color": "#2E66F2",
+        "embed": true
+    },
+	"resources": { 
+        "webhook": "DISCORD_WEBHOOK", 
+        "icon": "🔧", 
+        "color": "#EBEE3F",
+        "embed": true
+    },
+    "nameChange": { 
+        "webhook": "DISCORD_WEBHOOK", 
+        "icon": "⚠", 
+        "color": "#03FC98",
+        "embed": true
+    }
+}

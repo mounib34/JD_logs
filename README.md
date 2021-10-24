@@ -1,26 +1,39 @@
-<h1 align="center">
-	JOIN THE DISCORD FOR SUPPORT
-</h1>
-
-<img src="https://i.gyazo.com/3894b03d4351bcb566ec85afc7f9b231.png">
-
 <h4 align="center">
-	<a href="https://github.com/JokeDevil-com/JD_logs/releases/latest" title=""><img alt="Licence" src="https://img.shields.io/github/release/JokeDevil-com/JD_logs.svg"></a>
-	<a href="LICENSE" title=""><img alt="Licence" src="https://img.shields.io/github/license/JokeDevil-com/JD_logs.svg"></a>
-	<a href="https://discord.gg/qyPdHzDKmb" title=""><img alt="Discord Status" src="https://discordapp.com/api/guilds/721339695199682611/widget.png"></a>
+	<img src="https://img.shields.io/github/release/Prefech/JD_logs.png">
+	<img src="https://img.shields.io/github/last-commit/Prefech/JD_logs">
+	<img src="https://img.shields.io/github/license/Prefech/JD_logs.png">
+	<img src="https://img.shields.io/github/issues/Prefech/JD_logs.png">
+	<img src="https://img.shields.io/github/contributors/Prefech/JD_logs.png">
+	<a href="https://discord.gg/prefech" title=""><img alt="Discord Status" src="https://discordapp.com/api/guilds/721339695199682611/widget.png"></a>
 </h4>
 
-https://discord.gg/prefech
+<div align="center">
+  <a href="https://github.com/Prefech/JD_logs">
+    <img src="https://i.gyazo.com/3894b03d4351bcb566ec85afc7f9b231.png">
+  </a>
 
-<h4 align="center">
-This is a server log script for FiveM, which is used to log certain actions that are being made in the server.
-</h5>
+  <h1 align="center">JD_logs</h1>
 
-### 🛠 Requirements
+  <p align="center">
+    This is a server log script for FiveM, which is used to log certain actions that are being made in the server.
+    <br />
+    <a href="https://github.com/prefech/JD_logs/wiki"><strong>Explore wiki »</strong></a>
+    <br />
+    <br />    
+    <a href="https://github.com/Prefech/JD_logs/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/Prefech/JD_logs/issues">Request Feature</a>
+  </p>
+  <a href="https://discord.gg/prefech" title=""><img alt="Discord Invite" src="https://discordapp.com/api/guilds/721339695199682611/widget.png?style=banner2"></a>
+</div>
+
+
+
+<h3> 🛠 Requirements</h3>
 - A Discord Server
 - FXServer
 
-### ✅ Main Features
+<h3>✅ Main Features</h3>
 - Basic logs:
   - Chat Logs (Messages typed in chat)
   - Join Logs (When i player is connecting to the sever)
@@ -28,12 +41,13 @@ This is a server log script for FiveM, which is used to log certain actions that
   - Death Logs (When a player dies/get killed)
   - Shooting Logs (When a player fires a weapon)
   - Resource Logs (When a resouce get started/stopped)
-- Plugin Support
-  - Easy way to add more logs to JD_logs with plugins. (More plugins will be released soon!)
+- Screenshot Logs
+- Namechange Logs
+- Logs with or without embeds.
 - Optional custom logs
   - Easy to add with the export.
 
-### 🔧 Download & Installation
+<h3>🔧 Download & Installation</h3>
 
 1. Download the files
 2. Put the JD_logs folder in the server resource directory
@@ -42,33 +56,4 @@ This is a server log script for FiveM, which is used to log certain actions that
 ensure JD_logs
 ```
 
-### 📝 Creating Custom Logs
-
-1. Add the following code to your function/command.<br>
-*This code needs to be added in the resource of the action you want to log.*
-```
-exports.JD_logs:discord('EMBED_MESSAGE', PLAYER_ID, PLAYER_2_ID, 'COLOR', 'WEBHOOK_CHANNEL')
-```
-`EMBED_MESSAGE`: This will be the message send in the top of the embed.<br>
-`PLAYER_ID`: This will send the player to the script to get the info. (This needs to be a server id)<br>
-`PLAYER_2_ID`: This will send the second player's to the script to get the info. (This needs to be a server id)<br>
-`COLOR`: This will be the color of the embed. (You can use Decimal colors or Hex colors.)<br>
-`WEBHOOK_CHANNEL`: This will be the webhook channel listed in the config.lua.<br>
-
-
-2. Create a discord channel with webhook and add this to the webhooks.
-```
-local webhooks = {
-	all = "DISCORD_WEBHOOK",
-	chat = "DISCORD_WEBHOOK",
-	joins = "DISCORD_WEBHOOK",
-	leaving = "DISCORD_WEBHOOK",
-	deaths = "DISCORD_WEBHOOK",
-	shooting = "DISCORD_WEBHOOK",
-	resources = "DISCORD_WEBHOOK",
-	WEBHOOK_CHANNEL = "DISCORD_WEBHOOK", <------
-}
-```
-*This can be found in the `config.lua`*
-
-### ❓ For more questions you can join the discord here: https://discord.gg/prefech
+<h3>❓ For more questions you can join the discord here: https://discord.gg/prefech</h3>

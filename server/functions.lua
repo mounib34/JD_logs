@@ -1,0 +1,311 @@
+--[[
+    #####################################################################
+    #                _____           __          _                      #
+    #               |  __ \         / _|        | |                     #
+    #               | |__) | __ ___| |_ ___  ___| |__                   #
+    #               |  ___/ '__/ _ \  _/ _ \/ __| '_ \                  #
+    #               | |   | | |  __/ ||  __/ (__| | | |                 #
+    #               |_|   |_|  \___|_| \___|\___|_| |_|                 #
+    #                                                                   #
+    #                 JD_logs By Prefech 23-11-2021                     #
+    #                         www.prefech.com                           #
+    #                                                                   #
+    #####################################################################
+]]
+
+ServerFunc = {}
+
+ServerFunc.ConvertColor = function(channel)
+    ConvertColor(channel)
+end
+
+function ConvertColor(channel)
+    local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
+	local webhooksFile = json.decode(webhooksLaodFile)
+    if webhooksFile[channel] then
+        src = webhooksFile[channel].color
+        if string.find(src,"#") then 
+            return tonumber(src:gsub("#",""),16) 
+        else 
+            return src
+        end
+    else 
+        return 000000
+    end
+end
+
+ServerFunc.sendWebhooks = function(load)
+    sendWebhooks(load)
+end
+
+function sendWebhooks(load)
+    local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
+	local webhooksFile = json.decode(webhooksLaodFile)
+    
+    if webhooksFile[load.channel] then
+        PerformHttpRequest(webhooksFile[load.channel].webhook, function(err, text, headers) 
+            ServerFunc.getStatus(err, load.channel) 
+        end, 'POST', json.encode(load.messageToDeliver), {
+            ['Content-Type'] = 'application/json' 
+        })
+    else
+        print('^1Error: No webhook channel set for: ^0'..load.channel)
+    end
+end
+
+ServerFunc.GetTitle = function(channel, icon)
+	GetTitle(channel, icon)
+end
+
+function GetTitle(channel, icon)
+    if icon then
+		return icon.." "..firstToUpper(channel)
+	else
+		return "❓ "..firstToUpper(channel)
+	end
+end
+
+ServerFunc.getStatus = function(status, channel)
+	if status == 404 or status == 401 and Config.webhooks[channel] ~= "DISCORD_WEBHOOK" and Config.webhooks[channel] ~= "" then 
+		print('^3Warn: JD_logs webhook. Possible invalid webhook for "'..channel..'" webhook. Status code: '..status)
+	end
+end
+
+function GetPlayerDetails(src, config)
+    local ids = ExtractIdentifiers(src)
+	if config['postals'] then
+        postal = getPlayerLocation(src)
+        _postal = "\n**Nearest Postal:** ".. postal ..""
+    else
+        _postal = ""
+    end
+
+    if config['discordId'] then
+        if ids.discord then
+            _discordID ="\n**Discord ID:** <@" ..ids.discord:gsub("discord:", "")..">"
+        else
+            _discordID = "\n**Discord ID:** N/A"
+        end
+    else
+        _discordID = ""
+    end
+
+    if GetConvar("steam_webApiKey", "false") ~= 'false' then
+        if config['steamId'] then 
+            if ids.steam then 
+                _steamID ="\n**Steam ID:** " ..ids.steam.."" 
+            else 
+                _steamID = "\n**Steam ID:** N/A" 
+            end 
+        else 
+            _steamID = "" 
+        end
+        
+        if config['steamUrl'] then 
+            if ids.steam then 
+                _steamURL ="\nhttps://steamcommunity.com/profiles/" ..tonumber(ids.steam:gsub("steam:", ""),16).."" 
+            else 
+                _steamURL = "\n**Steam URL:** N/A" 
+            end 
+        else 
+            _steamURL = "" 
+        end       
+    else
+        _steamID = ""
+        _steamURL = ""
+        print('^1Error: You need to set a steam api key in your server.cfg for the steam identifiers to work!^0')
+    end
+ 
+	if config['license'] then 
+        if ids.license then 
+            _license ="\n**License:** " ..ids.license 
+        else 
+            _license = "\n**License :** N/A" 
+        end 
+    else 
+        _license = "" 
+    end
+
+	if config['ip'] then 
+        if ids.ip then 
+            _ip ="\n**IP:** " ..ids.ip 
+        else 
+            _ip = "\n**IP :** N/A" 
+        end 
+    else 
+        _ip = "" 
+    end
+
+    if config.Session or config.PlayTime then
+        playtime = exports.Prefech_PlayTime:getPlayTime(src)
+        if config.Session then
+            playTimeArgs = SecondsToClock(playtime.Session)
+            _session = "\n**Session Time:** `"..string.format("%02d:%02d:%02d", playTimeArgs.hours, playTimeArgs.minutes, playTimeArgs.seconds)..'`'
+        else
+            _session = ""
+        end
+        if config.PlayTime then
+            playTimeArgs = SecondsToClock(playtime.Total + playtime.Session)
+            _total = "\n**Total Time:** `"..string.format("%d days and %02d:%02d:%02d", playTimeArgs.days, playTimeArgs.hours, playTimeArgs.minutes, playTimeArgs.seconds)..'`'
+        else
+            _total = ""
+        end
+    else
+        _total = ""
+        _session = ""
+    end
+
+	if config.playerID then 
+        _playerID ="\n**Player ID:** " ..src.."" 
+    else 
+        _playerID = "" 
+    end
+
+	return _playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._session..''.._total..''.._ip
+end
+
+function SecondsToClock(seconds)
+	local days = math.floor(seconds / 86400)
+	seconds = seconds - days * 86400
+	local hours = math.floor(seconds / 3600)
+	seconds = seconds - hours * 3600
+	local minutes = math.floor(seconds / 60) 
+	seconds = seconds - minutes * 60
+	return {days = days, hours = hours, minutes = minutes, seconds = seconds}    
+  end
+
+ServerFunc.GetPlayerDetails = function(src, config)
+	GetPlayerDetails(src, config)
+end
+
+ServerFunc.CreateLog = function(args)
+    local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
+	local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
+	local webhooksFile = json.decode(webhooksLaodFile)
+	local configFile = json.decode(configLoadFile)
+    message = {
+        userName = configFile.userName, 
+        embeds = {{
+            ["color"] = ConvertColor(args.channel), 
+            ["author"] = {
+                ["name"] = configFile.communityName,
+                ["icon_url"] = configFile.communityLogo
+            },
+            ["title"] = GetTitle(args.channel),
+            ["description"] = args.EmbedMessage,
+            ["footer"] = {
+                ["text"] = configFile.footerText.." • "..os.date("%x %X %p"),
+                ["icon_url"] = configFile.footerIcon,
+            },
+        }}, 
+        avatar_url = configFile.avatar
+    }
+
+    if args.player_id then        
+		Player_Details = GetPlayerDetails(args.player_id, configFile)
+        message['embeds'][1].fields = {
+            {
+                ["name"] = "Player Details: "..GetPlayerName(args.player_id),
+                ["value"] = Player_Details,
+                ["inline"] = configFile.inlineField
+            }
+        }
+    end
+
+    if args.player_2_id then
+		Player_2_Details = GetPlayerDetails(args.player_2_id, configFile)
+        message['embeds'][1].fields[2]  = {
+            ["name"] = "Player Details: "..GetPlayerName(args.player_2_id),
+            ["value"] = Player_2_Details,
+            ["inline"] = configFile.inlineField
+        }
+    end
+
+    if args.responseUrl then
+        message['embeds'][1].image = {
+            ["url"] = args.responseUrl
+        }
+    end
+
+	content = {
+		userName = configFile.userName, 
+		content = args.EmbedMessage,
+		avatar_url = configFile.avatar
+	}
+
+	if configFile.allLogs then
+		if webhooksFile['all'].embed then
+			sendWebhooks({messageToDeliver = message, channel = 'all'})
+		else
+			sendWebhooks({messageToDeliver = content, channel = 'all'})
+		end
+  	end
+	if webhooksFile[args.channel] then
+		if webhooksFile[args.channel].embed then
+			sendWebhooks({messageToDeliver = message, channel = args.channel})
+		else
+			sendWebhooks({messageToDeliver = content, channel = args.channel})
+		end
+	else
+		sendWebhooks({messageToDeliver = content, channel = args.channel})
+	end
+end
+
+function ExtractIdentifiers(src)
+    local identifiers = {}
+
+    for i = 0, GetNumPlayerIdentifiers(src) - 1 do
+        local id = GetPlayerIdentifier(src, i)
+
+        if string.find(id, "steam") then
+            identifiers['steam'] = id
+        elseif string.find(id, "ip") then
+            identifiers['ip'] = id
+        elseif string.find(id, "discord") then
+            identifiers['discord'] = id
+        elseif string.find(id, "license") then
+            identifiers['license'] = id
+        elseif string.find(id, "xbl") then
+            identifiers['xbl'] = id
+        elseif string.find(id, "live") then
+            identifiers['live'] = id
+        end
+    end
+
+    return identifiers
+end
+
+
+function getPlayerLocation(src)
+    local raw = LoadResourceFile(GetCurrentResourceName(), "./json/postals.json")
+
+    local postals = json.decode(raw)
+    local nearest = nil
+
+    local player = src
+    local ped = GetPlayerPed(player)
+    local playerCoords = GetEntityCoords(ped)
+
+    local x, y = table.unpack(playerCoords)
+
+	local ndm = -1
+	local ni = -1
+	for i, p in ipairs(postals) do
+		local dm = (x - p.x) ^ 2 + (y - p.y) ^ 2
+		if ndm == -1 or dm < ndm then
+			ni = i
+			ndm = dm
+		end
+	end
+
+	if ni ~= -1 then
+		local nd = math.sqrt(ndm)
+		nearest = {i = ni, d = nd}
+	end
+	_nearest = postals[nearest.i].code
+	return _nearest
+end
+
+function firstToUpper(str)
+    return (str:gsub("^%l", string.upper))
+end
