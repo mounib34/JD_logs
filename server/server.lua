@@ -152,7 +152,7 @@ Citizen.CreateThread( function()
 		SetConvarServerInfo("JD_logs", "V"..GetResourceMetadata(GetCurrentResourceName(), 'version'))
 		if GetResourceMetadata(GetCurrentResourceName(), 'version') then
 			PerformHttpRequest(
-				'https://raw.githubusercontent.com/Prefech/JD_logs/master/version.json',
+				'https://raw.githubusercontent.com/Prefech/JD_logs/master/json/version.json',
 				function(code, res, headers)
 					if code == 200 then
 						local rv = json.decode(res)
