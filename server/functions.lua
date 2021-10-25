@@ -191,7 +191,7 @@ ServerFunc.CreateLog = function(args)
                 ["name"] = configFile.communityName,
                 ["icon_url"] = configFile.communityLogo
             },
-            ["title"] = GetTitle(args.channel),
+            ["title"] = GetTitle(args.channel, webhooksFile[args.channel].icon),
             ["description"] = args.EmbedMessage,
             ["footer"] = {
                 ["text"] = configFile.footerText.." • "..os.date("%x %X %p"),
