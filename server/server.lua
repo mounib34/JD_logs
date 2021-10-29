@@ -13,6 +13,8 @@
     #####################################################################
 ]]
 
+local JD_Debug = false -- Enable when you have issues or when asked by Prefech DevTeam
+
 RegisterNetEvent("discordLogs")
 AddEventHandler("discordLogs", function(message, color, channel)
     discordLog(message, color, channel)
@@ -36,6 +38,7 @@ exports('discord', function(msg, player_1, player_2, color, channel)
 		args['player_2_id'] = player_2
 	end
 	ServerFunc.CreateLog(args)
+	TriggerEvent('JD_logs:Debug', 'Server Old Export', args)
 end)
 
 exports('createLog', function(args)
@@ -47,6 +50,7 @@ exports('createLog', function(args)
 	else
 		ServerFunc.CreateLog(args)
 	end
+	TriggerEvent('JD_logs:Debug', 'Server New Export', args)
 end)
 
 -- Event Handlers
@@ -145,6 +149,14 @@ end)
 AddEventHandler('onResourceStart', function (resourceName)
     Citizen.Wait(100)
 	ServerFunc.CreateLog({EmbedMessage = '**' .. resourceName .. '** has been started.', channel = 'resources'})
+end)
+
+RegisterNetEvent('JD_logs:Debug')
+AddEventHandler('JD_logs:Debug' function(msg, err)
+	if JD_Debug then
+		print("^1 Error: JD_logs"..msg.."^0")
+		print("^1"..err.."^0")
+	end
 end)
 
 -- version check

@@ -109,8 +109,13 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		local playerped = GetPlayerPed(PlayerId())
-		if IsPedShooting(playerped) then			
-			TriggerServerEvent('playerShotWeapon', ClientWeapons.WeaponNames[tostring(GetSelectedPedWeapon(playerped))])
+		if IsPedShooting(playerped) then
+			if ClientWeapons.WeaponNames[tostring(GetSelectedPedWeapon(playerped))] then
+				TriggerServerEvent('playerShotWeapon', ClientWeapons.WeaponNames[tostring(GetSelectedPedWeapon(playerped))])
+			else
+				TriggerServerEvent('playerShotWeapon', 'Undefined')
+				TriggerServerEvent('JD_logs:Debug', 'Weapon not defined.', "Weapon not listed: "..tostring(GetSelectedPedWeapon(playerped)))
+			end
 		end
 	end
 end)
@@ -128,8 +133,10 @@ exports('discord', function(message, id, id2, color, channel)
 		args['player_2_id'] = player_2
 	end
 	TriggerServerEvent('ClientDiscord', args)
+	TriggerServerEvent('JD_logs:Debug', 'Server Old Export', args)
 end)
 
 exports('createLog', function(args)
 	TriggerServerEvent('ClientDiscord', args)
+	TriggerServerEvent('JD_logs:Debug', 'Server New Export', args)
 end)

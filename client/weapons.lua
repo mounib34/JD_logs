@@ -119,11 +119,17 @@ ClientWeapons.WeaponNames = {
 	[tostring(GetHashKey('WEAPON_GRENADELAUNCHER_SMOKE'))] = 'Smoke Grenade Launcher',
 	[tostring(GetHashKey('WEAPON_PASSENGER_ROCKET'))] = 'Passenger Rocket',
 	[tostring(GetHashKey('WEAPON_AIRSTRIKE_ROCKET'))] = 'Airstrike Rocket',
+	[tostring(GetHashKey('VEHICLE_WEAPON_SPACE_ROCKET'))] = 'Orbital Canon',
+	[tostring(GetHashKey('VEHICLE_WEAPON_PLANE_ROCKET'))] = 'Plane Rocket',
 	[tostring(GetHashKey('WEAPON_STINGER'))] = 'Stinger [Vehicle]',
-	[tostring(GetHashKey('OBJECT'))] = 'Object',
 	[tostring(GetHashKey('VEHICLE_WEAPON_TANK'))] = 'Tank Cannon',
 	[tostring(GetHashKey('VEHICLE_WEAPON_SPACE_ROCKET'))] = 'Rockets',
 	[tostring(GetHashKey('VEHICLE_WEAPON_PLAYER_LASER'))] = 'Laser',
+	[tostring(GetHashKey('VEHICLE_WEAPON_PLAYER_LAZER'))] = 'Lazer',
+	[tostring(GetHashKey('VEHICLE_WEAPON_PLAYER_BUZZARD'))] = 'Buzzard',
+	[tostring(GetHashKey('VEHICLE_WEAPON_PLAYER_HUNTER'))] = 'Hunter',
+	[tostring(GetHashKey('VEHICLE_WEAPON_WATER_CANNON'))] = 'Water Cannon',
+
 	[tostring(GetHashKey('AMMO_RPG'))] = 'Rocket',
 	[tostring(GetHashKey('AMMO_TANK'))] = 'Tank',
 	[tostring(GetHashKey('AMMO_SPACE_ROCKET'))] = 'Rocket',
@@ -145,5 +151,5 @@ ClientWeapons.WeaponNames = {
 	[tostring(GetHashKey('VEHICLE_WEAPON_ROTORS'))] = 'Rotors',
 	[tostring(GetHashKey('WEAPON_AIR_DEFENCE_GUN'))] = 'Air Defence Gun',
 	[tostring(GetHashKey('WEAPON_ANIMAL'))] = 'Animal',
-	[tostring(GetHashKey('WEAPON_COUGAR'))] = 'Cougar'
+	[tostring(GetHashKey('WEAPON_COUGAR'))] = 'Cougar',
 }
