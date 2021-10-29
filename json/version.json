@@ -1,5 +1,5 @@
 {
     "date": "Oct 23, 2021",
-    "version": "2.0.1",
-    "changelog": "Fixed issue where the Embed icon wasn't grabbed correctly."
+    "version": "2.0.2",
+    "changelog": "Added:\n• Check for valid weapons\n• Some vehicle weapons\n• Debug options for faster issue resolving"
 }
