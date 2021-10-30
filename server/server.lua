@@ -152,7 +152,7 @@ AddEventHandler('onResourceStart', function (resourceName)
 end)
 
 RegisterNetEvent('JD_logs:Debug')
-AddEventHandler('JD_logs:Debug' function(msg, err)
+AddEventHandler('JD_logs:Debug', function(msg, err)
 	if JD_Debug then
 		print("^1 Error: JD_logs"..msg.."^0")
 		print("^1"..err.."^0")
