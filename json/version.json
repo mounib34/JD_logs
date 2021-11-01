@@ -1,5 +1,5 @@
 {
-    "date": "Oct 23, 2021",
-    "version": "2.0.2",
-    "changelog": "Added:\n• Check for valid weapons\n• Some vehicle weapons\n• Debug options for faster issue resolving"
+    "date": "Nov 01, 2021",
+    "version": "2.0.3",
+    "changelog": "IMPORTANT UPDATE!\n\nFixed:\n• Issue where people where being able to get access to the webhooks."
 }

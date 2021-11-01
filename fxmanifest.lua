@@ -7,7 +7,7 @@
     #               | |   | | |  __/ ||  __/ (__| | | |                 #
     #               |_|   |_|  \___|_| \___|\___|_| |_|                 #
     #                                                                   #
-    #                 JD_logs By Prefech 23-11-2021                     #
+    #                 JD_logs By Prefech 01-11-2021                     #
     #                         www.prefech.com                           #
     #                                                                   #
     #####################################################################
@@ -15,7 +15,7 @@
 
 author 'Prefech'
 description 'FXServer logs to Discord (https://prefech.com/)'
-version '2.0.2'
+version '2.0.3'
 url 'https://prefech.com'
 
 -- Server Scripts
@@ -29,10 +29,6 @@ client_scripts {
     'client/client.lua',
     'client/functions.lua',
     'client/weapons.lua'
-}
-
-files { 
-    'json/*.json'
 }
 
 game 'gta5'
