@@ -15,13 +15,13 @@
 
 local JD_Debug = false -- Enable when you have issues or when asked by Prefech DevTeam
 
-RegisterNetEvent("discordLogs")
-AddEventHandler("discordLogs", function(message, color, channel)
+RegisterNetEvent("Prefech:discordLogs")
+AddEventHandler("Prefech:discordLogs", function(message, color, channel)
     discordLog(message, color, channel)
 end)
 
-RegisterNetEvent("ClientUploadScreenshot")
-AddEventHandler("ClientUploadScreenshot", function(args)
+RegisterNetEvent("Prefech:ClientUploadScreenshot")
+AddEventHandler("Prefech:ClientUploadScreenshot", function(args)
 	ServerFunc.CreateLog(args)
 end)
 
@@ -38,7 +38,7 @@ exports('discord', function(msg, player_1, player_2, color, channel)
 		args['player_2_id'] = player_2
 	end
 	ServerFunc.CreateLog(args)
-	TriggerEvent('JD_logs:Debug', 'Server Old Export', args)
+	TriggerEvent('Prefech:JD_logs:Debug', 'Server Old Export', args)
 end)
 
 exports('createLog', function(args)
@@ -46,11 +46,11 @@ exports('createLog', function(args)
 		local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
 		local webhooksFile = json.decode(webhooksLaodFile)
 		args['url'] = webhooksFile['imageStore'].webhook
-		TriggerClientEvent('ClientCreateScreenshot', args.player_id, args)
+		TriggerClientEvent('Prefech:ClientCreateScreenshot', args.player_id, args)
 	else
 		ServerFunc.CreateLog(args)
 	end
-	TriggerEvent('JD_logs:Debug', 'Server New Export', args)
+	TriggerEvent('Prefech:JD_logs:Debug', 'Server New Export', args)
 end)
 
 -- Event Handlers
@@ -92,8 +92,8 @@ AddEventHandler('chatMessage', function(source, name, msg)
 end)
 
 -- Send message when Player died (including reason/killer check) (Not always working)
-RegisterServerEvent('playerDied')
-AddEventHandler('playerDied',function(args)
+RegisterServerEvent('Prefech:playerDied')
+AddEventHandler('Prefech:playerDied',function(args)
 	if args.weapon == nil then _Weapon = "" else _Weapon = ""..args.weapon.."" end
 	if args.type == 1 then  -- Suicide/died
 		ServerFunc.CreateLog({
@@ -118,8 +118,8 @@ AddEventHandler('playerDied',function(args)
 end)
 
 -- Send message when Player fires a weapon
-RegisterServerEvent('playerShotWeapon')
-AddEventHandler('playerShotWeapon', function(weapon)
+RegisterServerEvent('Prefech:playerShotWeapon')
+AddEventHandler('Prefech:playerShotWeapon', function(weapon)
 	local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
 	local configFile = json.decode(configLoadFile)
 	if configFile['weaponLog'] then
@@ -128,13 +128,13 @@ AddEventHandler('playerShotWeapon', function(weapon)
 end)
 
 -- Getting exports from clientside
-RegisterServerEvent('ClientDiscord')
-AddEventHandler('ClientDiscord', function(args)
+RegisterServerEvent('Prefech:ClientDiscord')
+AddEventHandler('Prefech:ClientDiscord', function(args)
 	if args.screenshot then
 		local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
 		local webhooksFile = json.decode(webhooksLaodFile)
 		args['url'] = webhooksFile['imageStore'].webhook
-		TriggerClientEvent('ClientCreateScreenshot', args.player_id, args)
+		TriggerClientEvent('Prefech:ClientCreateScreenshot', args.player_id, args)
 	else
 		ServerFunc.CreateLog(args)
 	end
@@ -151,11 +151,74 @@ AddEventHandler('onResourceStart', function (resourceName)
 	ServerFunc.CreateLog({EmbedMessage = '**' .. resourceName .. '** has been started.', channel = 'resources'})
 end)
 
-RegisterNetEvent('JD_logs:Debug')
-AddEventHandler('JD_logs:Debug', function(msg, err)
+local storage = nil
+RegisterNetEvent('Prefech:sendClientLogStorage')
+AddEventHandler('Prefech:sendClientLogStorage', function(_storage)
+	storage = _storage
+end)
+
+RegisterCommand('logs', function(source, args, RawCommand)
+	local configFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
+	local cfgFile = json.decode(configFile)
+	if IsPlayerAceAllowed(source, cfgFile.logHistoryPerms) then
+		if tonumber(args[1]) then
+			TriggerClientEvent('Prefech:getClientLogStorage', args[1])
+			Citizen.Wait(500)
+			if tablelength(storage) == 0 then
+				exports.Prefech_Notify:Notify({
+					title = "Recent logs for: "..GetPlayerName(args[1]).." (0)",
+					message = "No logs avalible.",
+					color = "#93CAED",
+					target = source,
+					timeout = 15
+				})
+			else
+				for k,v in pairs(storage) do
+					exports.Prefech_Notify:Notify({
+						title = "Recent logs for: "..GetPlayerName(args[1]).." ("..k..")",
+						message = "Channel: "..v.Channel.."\nMessage: "..v.Message:gsub("**",""):gsub("`","").."\nTimeStamp: "..v.TimeStamp,
+						color = "#93CAED",
+						target = source,
+						timeout = 15
+					})
+				end
+			end
+		else
+			exports.Prefech_Notify:Notify({
+				title = "Error!",
+				message = "Invalid player ID",
+				color = "#93CAED",
+				target = source,
+				timeout = 15
+			})
+		end
+	else
+		exports.Prefech_Notify:Notify({
+			title = "Error!",
+			message = "You don't have permission to use this command",
+			color = "#93CAED",
+			target = source,
+			timeout = 15
+		})
+	end
+end)
+
+function tablelength(T)
+	local count = 0
+	for _ in pairs(T) do count = count + 1 end
+	return count
+end
+
+RegisterNetEvent('Prefech:JD_logs:Debug')
+AddEventHandler('Prefech:JD_logs:Debug', function(msg, err)
 	if JD_Debug then
 		print("^1 Error: JD_logs"..msg.."^0")
-		print("^1"..err.."^0")
+		for k,v in pairs(err) do
+			print("^1"..k.."^0")
+		   for k,v in pairs(v) do
+				print("^1"..k.."^0", v)
+		   end
+		end
 	end
 end)
 

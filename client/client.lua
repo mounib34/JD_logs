@@ -70,14 +70,14 @@ Citizen.CreateThread(function()
 			end
 
 			if DeathReason == 'committed suicide' or DeathReason == 'died' then
-				TriggerServerEvent('playerDied', {
+				TriggerServerEvent('Prefech:playerDied', {
 					type = 1, 
 					player_id = GetPlayerServerId(PlayerId()), 
 					death_reason = DeathReason, 
 					weapon = Weapon
 				})
 			else
-				TriggerServerEvent('playerDied', {
+				TriggerServerEvent('Prefech:playerDied', {
 					type = 2, 
 					player_id = GetPlayerServerId(PlayerId()), 
 					player_2_id = GetPlayerServerId(Killer), 
@@ -96,12 +96,12 @@ Citizen.CreateThread(function()
 	end
 end)
 
-RegisterNetEvent('ClientCreateScreenshot')
-AddEventHandler('ClientCreateScreenshot', function(args)
+RegisterNetEvent('Prefech:ClientCreateScreenshot')
+AddEventHandler('Prefech:ClientCreateScreenshot', function(args)
     exports['screenshot-basic']:requestScreenshotUpload(args.url, 'files[]', function(data)
         local resp = json.decode(data)		
 		args['responseUrl'] = resp.attachments[1].url
-        TriggerServerEvent('ClientUploadScreenshot', args)
+        TriggerServerEvent('Prefech:ClientUploadScreenshot', args)
     end)
 end)
 
@@ -111,10 +111,10 @@ Citizen.CreateThread(function()
 		local playerped = GetPlayerPed(PlayerId())
 		if IsPedShooting(playerped) then
 			if ClientWeapons.WeaponNames[tostring(GetSelectedPedWeapon(playerped))] then
-				TriggerServerEvent('playerShotWeapon', ClientWeapons.WeaponNames[tostring(GetSelectedPedWeapon(playerped))])
+				TriggerServerEvent('Prefech:playerShotWeapon', ClientWeapons.WeaponNames[tostring(GetSelectedPedWeapon(playerped))])
 			else
-				TriggerServerEvent('playerShotWeapon', 'Undefined')
-				TriggerServerEvent('JD_logs:Debug', 'Weapon not defined.', "Weapon not listed: "..tostring(GetSelectedPedWeapon(playerped)))
+				TriggerServerEvent('Prefech:playerShotWeapon', 'Undefined')
+				TriggerServerEvent('Prefech:JD_logs:Debug', 'Weapon not defined.', "Weapon not listed: "..tostring(GetSelectedPedWeapon(playerped)))
 			end
 		end
 	end
@@ -132,11 +132,37 @@ exports('discord', function(message, id, id2, color, channel)
 	if player_2 ~= 0 then
 		args['player_2_id'] = player_2
 	end
-	TriggerServerEvent('ClientDiscord', args)
-	TriggerServerEvent('JD_logs:Debug', 'Server Old Export', args)
+	TriggerServerEvent('Prefech:ClientDiscord', args)
+	TriggerServerEvent('Prefech:JD_logs:Debug', 'Server Old Export', args)
 end)
 
 exports('createLog', function(args)
-	TriggerServerEvent('ClientDiscord', args)
-	TriggerServerEvent('JD_logs:Debug', 'Server New Export', args)
+	TriggerServerEvent('Prefech:ClientDiscord', args)
+	TriggerServerEvent('Prefech:JD_logs:Debug', 'Server New Export', args)
 end)
+
+local clientStorage = {}
+RegisterNetEvent('Prefech:ClientLogStorage')
+AddEventHandler('Prefech:ClientLogStorage', function(args)
+    if tablelength(clientStorage) <= 4 then
+		table.insert(clientStorage, args)
+	else
+		table.remove(clientStorage, 1)
+		table.insert(clientStorage, args)
+	end
+end)
+
+RegisterNetEvent('Prefech:getClientLogStorage')
+AddEventHandler('Prefech:getClientLogStorage', function()
+    TriggerServerEvent('Prefech:sendClientLogStorage', clientStorage)
+end)
+
+function tablelength(T)
+	local count = 0
+	for _ in pairs(T) do count = count + 1 end
+	return count
+end
+
+TriggerEvent("chat:addSuggestion", "/logs", "See the recent 5 logs of a player.", {
+	{ name="id", help="The id of the player." }
+});

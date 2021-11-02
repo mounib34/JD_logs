@@ -155,13 +155,17 @@ function GetPlayerDetails(src, config)
         _session = ""
     end
 
-	if config.playerID then 
-        _playerID ="\n**Player ID:** " ..src.."" 
+	if config['playerId'] then 
+        if channel ~= 'joins' then
+            _playerID ="\n**Player ID:** " ..src.."" 
+        else
+            _playerID = "\n**Player ID: N/A"     
+        end
     else 
         _playerID = "" 
     end
 
-	return _playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._session..''.._total..''.._ip
+    return _playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._session..''.._total..''.._ip
 end
 
 function SecondsToClock(seconds)
@@ -201,7 +205,10 @@ ServerFunc.CreateLog = function(args)
         avatar_url = configFile.avatar
     }
 
-    if args.player_id then        
+    if args.player_id then
+        if webhooksFile[args.channel].logHistory then
+            TriggerClientEvent('Prefech:ClientLogStorage', args.player_id, { Channel = args.channel, Message = args.EmbedMessage, TimeStamp = os.date("%x %X %p") })
+        end
 		Player_Details = GetPlayerDetails(args.player_id, configFile)
         message['embeds'][1].fields = {
             {
@@ -213,6 +220,9 @@ ServerFunc.CreateLog = function(args)
     end
 
     if args.player_2_id then
+        if webhooksFile[args.channel].logHistory then
+            TriggerClientEvent('Prefech:ClientLogStorage', args.player_2_id, { Channel = args.channel, Message = args.EmbedMessage, TimeStamp = os.date("%x %X %p") })
+        end
 		Player_2_Details = GetPlayerDetails(args.player_2_id, configFile)
         message['embeds'][1].fields[2]  = {
             ["name"] = "Player Details: "..GetPlayerName(args.player_2_id),

@@ -11,6 +11,7 @@
         "webhook": "DISCORD_WEBHOOK", 
         "icon": "💬", 
         "color": "#A1A1A1",
+        "logHistory": true,
         "embed": true
     },
 	"joins": { 
@@ -29,12 +30,14 @@
         "webhook": "DISCORD_WEBHOOK", 
         "icon": "💀", 
         "color": "#000000",
+        "logHistory": true,
         "embed": true
     },
 	"shooting": { 
         "webhook": "DISCORD_WEBHOOK", 
         "icon": "🔫", 
         "color": "#2E66F2",
+        "logHistory": false,
         "embed": true
     },
 	"resources": { 
