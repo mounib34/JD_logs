@@ -71,7 +71,7 @@ ServerFunc.getStatus = function(status, channel)
 	end
 end
 
-function GetPlayerDetails(src, config)
+function GetPlayerDetails(src, config, channel)
     local ids = ExtractIdentifiers(src)
 	if config['postals'] then
         postal = getPlayerLocation(src)
@@ -178,8 +178,8 @@ function SecondsToClock(seconds)
 	return {days = days, hours = hours, minutes = minutes, seconds = seconds}    
   end
 
-ServerFunc.GetPlayerDetails = function(src, config)
-	GetPlayerDetails(src, config)
+ServerFunc.GetPlayerDetails = function(src, config, channel)
+	GetPlayerDetails(src, config, channel)
 end
 
 ServerFunc.CreateLog = function(args)
@@ -210,7 +210,7 @@ ServerFunc.CreateLog = function(args)
             if webhooksFile[args.channel].logHistory then
                 TriggerClientEvent('Prefech:ClientLogStorage', args.player_id, { Channel = args.channel, Message = args.EmbedMessage, TimeStamp = os.date("%x %X %p") })
             end
-            Player_Details = GetPlayerDetails(args.player_id, configFile)
+            Player_Details = GetPlayerDetails(args.player_id, configFile, args.channel)
             message['embeds'][1].fields = {
                 {
                     ["name"] = "Player Details: "..GetPlayerName(args.player_id),
@@ -224,7 +224,7 @@ ServerFunc.CreateLog = function(args)
             if webhooksFile[args.channel].logHistory then
                 TriggerClientEvent('Prefech:ClientLogStorage', args.player_2_id, { Channel = args.channel, Message = args.EmbedMessage, TimeStamp = os.date("%x %X %p") })
             end
-            Player_2_Details = GetPlayerDetails(args.player_2_id, configFile)
+            Player_2_Details = GetPlayerDetails(args.player_2_id, configFile, args.channel)
             message['embeds'][1].fields[2]  = {
                 ["name"] = "Player Details: "..GetPlayerName(args.player_2_id),
                 ["value"] = Player_2_Details,
