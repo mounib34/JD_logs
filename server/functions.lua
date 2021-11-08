@@ -138,13 +138,13 @@ function GetPlayerDetails(src, config)
 
     if config.Session or config.PlayTime then
         playtime = exports.Prefech_PlayTime:getPlayTime(src)
-        if config.Session then
+        if config.Session and channel ~= 'joins' then
             playTimeArgs = SecondsToClock(playtime.Session)
             _session = "\n**Session Time:** `"..string.format("%02d:%02d:%02d", playTimeArgs.hours, playTimeArgs.minutes, playTimeArgs.seconds)..'`'
         else
             _session = ""
         end
-        if config.PlayTime then
+        if config.PlayTime and channel ~= 'joins' then
             playTimeArgs = SecondsToClock(playtime.Total + playtime.Session)
             _total = "\n**Total Time:** `"..string.format("%d days and %02d:%02d:%02d", playTimeArgs.days, playTimeArgs.hours, playTimeArgs.minutes, playTimeArgs.seconds)..'`'
         else
@@ -187,78 +187,82 @@ ServerFunc.CreateLog = function(args)
 	local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
 	local webhooksFile = json.decode(webhooksLaodFile)
 	local configFile = json.decode(configLoadFile)
-    message = {
-        userName = configFile.userName, 
-        embeds = {{
-            ["color"] = ConvertColor(args.channel), 
-            ["author"] = {
-                ["name"] = configFile.communityName,
-                ["icon_url"] = configFile.communityLogo
-            },
-            ["title"] = GetTitle(args.channel, webhooksFile[args.channel].icon),
-            ["description"] = args.EmbedMessage,
-            ["footer"] = {
-                ["text"] = configFile.footerText.." • "..os.date("%x %X %p"),
-                ["icon_url"] = configFile.footerIcon,
-            },
-        }}, 
-        avatar_url = configFile.avatar
-    }
+    if webhooksFile[args.channel] then
+        message = {
+            userName = configFile.userName, 
+            embeds = {{
+                ["color"] = ConvertColor(args.channel), 
+                ["author"] = {
+                    ["name"] = configFile.communityName,
+                    ["icon_url"] = configFile.communityLogo
+                },
+                ["title"] = GetTitle(args.channel, webhooksFile[args.channel].icon),
+                ["description"] = args.EmbedMessage,
+                ["footer"] = {
+                    ["text"] = configFile.footerText.." • "..os.date("%x %X %p"),
+                    ["icon_url"] = configFile.footerIcon,
+                },
+            }}, 
+            avatar_url = configFile.avatar
+        }
 
-    if args.player_id then
-        if webhooksFile[args.channel].logHistory then
-            TriggerClientEvent('Prefech:ClientLogStorage', args.player_id, { Channel = args.channel, Message = args.EmbedMessage, TimeStamp = os.date("%x %X %p") })
+        if args.player_id then
+            if webhooksFile[args.channel].logHistory then
+                TriggerClientEvent('Prefech:ClientLogStorage', args.player_id, { Channel = args.channel, Message = args.EmbedMessage, TimeStamp = os.date("%x %X %p") })
+            end
+            Player_Details = GetPlayerDetails(args.player_id, configFile)
+            message['embeds'][1].fields = {
+                {
+                    ["name"] = "Player Details: "..GetPlayerName(args.player_id),
+                    ["value"] = Player_Details,
+                    ["inline"] = configFile.inlineField
+                }
+            }
         end
-		Player_Details = GetPlayerDetails(args.player_id, configFile)
-        message['embeds'][1].fields = {
-            {
-                ["name"] = "Player Details: "..GetPlayerName(args.player_id),
-                ["value"] = Player_Details,
+
+        if args.player_2_id then
+            if webhooksFile[args.channel].logHistory then
+                TriggerClientEvent('Prefech:ClientLogStorage', args.player_2_id, { Channel = args.channel, Message = args.EmbedMessage, TimeStamp = os.date("%x %X %p") })
+            end
+            Player_2_Details = GetPlayerDetails(args.player_2_id, configFile)
+            message['embeds'][1].fields[2]  = {
+                ["name"] = "Player Details: "..GetPlayerName(args.player_2_id),
+                ["value"] = Player_2_Details,
                 ["inline"] = configFile.inlineField
             }
-        }
-    end
-
-    if args.player_2_id then
-        if webhooksFile[args.channel].logHistory then
-            TriggerClientEvent('Prefech:ClientLogStorage', args.player_2_id, { Channel = args.channel, Message = args.EmbedMessage, TimeStamp = os.date("%x %X %p") })
         end
-		Player_2_Details = GetPlayerDetails(args.player_2_id, configFile)
-        message['embeds'][1].fields[2]  = {
-            ["name"] = "Player Details: "..GetPlayerName(args.player_2_id),
-            ["value"] = Player_2_Details,
-            ["inline"] = configFile.inlineField
+
+        if args.responseUrl then
+            message['embeds'][1].image = {
+                ["url"] = args.responseUrl
+            }
+        end
+
+        content = {
+            userName = configFile.userName, 
+            content = args.EmbedMessage,
+            avatar_url = configFile.avatar
         }
+
+        if configFile.allLogs then
+            if webhooksFile['all'].embed then
+                sendWebhooks({messageToDeliver = message, channel = 'all'})
+            else
+                sendWebhooks({messageToDeliver = content, channel = 'all'})
+            end
+        end
+        if webhooksFile[args.channel] then
+            if webhooksFile[args.channel].embed then
+                sendWebhooks({messageToDeliver = message, channel = args.channel})
+            else
+                sendWebhooks({messageToDeliver = content, channel = args.channel})
+            end
+        else
+            sendWebhooks({messageToDeliver = content, channel = args.channel})
+        end
+    else
+        print("JD_logs: Webhooks channel not found. ("..args.channel..")")
     end
-
-    if args.responseUrl then
-        message['embeds'][1].image = {
-            ["url"] = args.responseUrl
-        }
-    end
-
-	content = {
-		userName = configFile.userName, 
-		content = args.EmbedMessage,
-		avatar_url = configFile.avatar
-	}
-
-	if configFile.allLogs then
-		if webhooksFile['all'].embed then
-			sendWebhooks({messageToDeliver = message, channel = 'all'})
-		else
-			sendWebhooks({messageToDeliver = content, channel = 'all'})
-		end
-  	end
-	if webhooksFile[args.channel] then
-		if webhooksFile[args.channel].embed then
-			sendWebhooks({messageToDeliver = message, channel = args.channel})
-		else
-			sendWebhooks({messageToDeliver = content, channel = args.channel})
-		end
-	else
-		sendWebhooks({messageToDeliver = content, channel = args.channel})
-	end
 end
 
 function ExtractIdentifiers(src)
