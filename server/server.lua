@@ -56,6 +56,7 @@ end)
 -- Event Handlers
 -- Send message when Player connects to the server.
 AddEventHandler("playerConnecting", function(name, setReason, deferrals)
+	deferrals.defer()
 	ServerFunc.CreateLog({EmbedMessage = '**' ..GetPlayerName(source).. '** is connecting to the server.', player_id = source, channel = 'joins'})
 
 	local loadFile = LoadResourceFile(GetCurrentResourceName(), "./json/names.json")
@@ -80,9 +81,10 @@ AddEventHandler("playerConnecting", function(name, setReason, deferrals)
 		end
 		loadedFile[ids.steam] = GetPlayerName(source)
 		SaveResourceFile(GetCurrentResourceName(), "./json/names.json", json.encode(loadedFile), -1)
+		deferrals.done()
 	else
 		if cfgFile.forceSteam then
-			DropPlayer(source, "Please start steam and reconnect to the server.")
+			deferrals.done(source, "Please start steam and reconnect to the server.")
 		else
 			for _, i in ipairs(GetPlayers()) do
 				if IsPlayerAceAllowed(i, cfgFile.nameChangePerms) then 
@@ -92,6 +94,7 @@ AddEventHandler("playerConnecting", function(name, setReason, deferrals)
 					})
 				end
 			end
+			deferrals.done()
 		end
 	end
 end)
