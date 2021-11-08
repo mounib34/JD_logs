@@ -118,9 +118,9 @@ function GetPlayerDetails(src, config, channel)
  
 	if config['license'] then 
         if ids.license then 
-            _license ="\n**License:** " ..ids.license 
+            _license ="\n**License:** " ..ids.license
         else 
-            _license = "\n**License :** N/A" 
+            _license = "\n**License:** N/A" 
         end 
     else 
         _license = "" 
@@ -128,9 +128,9 @@ function GetPlayerDetails(src, config, channel)
 
 	if config['ip'] then 
         if ids.ip then 
-            _ip ="\n**IP:** " ..ids.ip 
+            _ip ="\n**IP:** " ..ids.ip:gsub("ip:", "")
         else 
-            _ip = "\n**IP :** N/A" 
+            _ip = "\n**IP:** N/A" 
         end 
     else 
         _ip = "" 
