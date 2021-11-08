@@ -15,7 +15,7 @@
 
 author 'Prefech'
 description 'FXServer logs to Discord (https://prefech.com/)'
-version '2.1.0'
+version '2.1.1'
 url 'https://prefech.com'
 
 -- Server Scripts

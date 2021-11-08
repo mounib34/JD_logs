@@ -14,6 +14,8 @@
     "Session": false,
     "PlayTime": false,
 
+    "forceSteam": false,
+
     "nameChangePerms": "jd.staff",
     "logHistoryPerms": "jd.staff",
 
@@ -24,5 +26,5 @@
     "footerText": "2020 - 2021 © Prefech",
     "footerIcon": "https://via.placeholder.com/30x30",
 
-    "Version": "2.1.0"
+    "Version": "2.1.1"
 }
