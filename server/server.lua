@@ -62,23 +62,23 @@ AddEventHandler("playerConnecting", function(name, setReason, deferrals)
 	local loadedFile = json.decode(loadFile)
 	local conaifFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
 	local cfgFile = json.decode(conaifFile)
-    local steam = ExtractIdentifiers(source).steam
+    local ids = ExtractIdentifiers(source)
 
-	if steam ~= nil then
-		if loadedFile[steam] ~= nil then 
-			if loadedFile[steam] ~= GetPlayerName(source) then 
+	if ids.steam then
+		if loadedFile[ids.steam] ~= nil then 
+			if loadedFile[ids.steam] ~= GetPlayerName(source) then 
 				for _, i in ipairs(GetPlayers()) do
 					if IsPlayerAceAllowed(i, cfgFile.nameChangePerms) then 
 						TriggerClientEvent('chat:addMessage', i, {
 							template = '<div style="background-color: rgba(90, 90, 90, 0.9); text-align: center; border-radius: 0.5vh; padding: 0.7vh; font-size: 1.7vh;"><b>Player ^1{0} ^0used to be named ^1{1}</b></div>',
-							args = { GetPlayerName(source), loadedFile[steam] }
+							args = { GetPlayerName(source), loadedFile[ids.steam] }
 						})
 					end
 				end
-				ServerFunc.CreateLog({EmbedMessage = 'Player **' .. GetPlayerName(source) .. '** used to be named **' ..loadedFile[steam]..'**', player_id = source, channel = 'NameChange'})
+				ServerFunc.CreateLog({EmbedMessage = 'Player **' .. GetPlayerName(source) .. '** used to be named **' ..loadedFile[ids.steam]..'**', player_id = source, channel = 'NameChange'})
 			end
 		end
-		loadedFile[steam] = GetPlayerName(source)
+		loadedFile[ids.steam] = GetPlayerName(source)
 		SaveResourceFile(GetCurrentResourceName(), "./json/names.json", json.encode(loadedFile), -1)
 	else
 		if cfgFile.forceSteam then
