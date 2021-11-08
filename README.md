@@ -29,25 +29,25 @@
 
 
 
-<h3> 🛠 Requirements</h3>
+### 🛠 Requirements
 - A Discord Server
 - FXServer
 
-<h3>✅ Main Features</h3>
-- Basic logs:
-  - Chat Logs (Messages typed in chat)
-  - Join Logs (When i player is connecting to the sever)
-  - Leave Logs (When a player disconnects from the server)
-  - Death Logs (When a player dies/get killed)
-  - Shooting Logs (When a player fires a weapon)
-  - Resource Logs (When a resouce get started/stopped)
-- Screenshot Logs
-- Namechange Logs
-- Logs with or without embeds.
-- Optional custom logs
-  - Easy to add with the export.
+### ✅ Main Features
+- Basic logs:  
+  - Chat Logs (Messages typed in chat)  
+  - Join Logs (When i player is connecting to the sever)  
+  - Leave Logs (When a player disconnects from the server)  
+  - Death Logs (When a player dies/get killed)  
+  - Shooting Logs (When a player fires a weapon)  
+  - Resource Logs (When a resouce get started/stopped)  
+- Screenshot Logs  
+- Namechange Logs  
+- Logs with or without embeds.  
+- Optional custom logs  
+  - Easy to add with the export.  
 
-<h3>🔧 Download & Installation</h3>
+### 🔧 Download & Installation
 
 1. Download the files
 2. Put the JD_logs folder in the server resource directory
@@ -56,4 +56,4 @@
 ensure JD_logs
 ```
 
-<h3>❓ For more questions you can join the discord here: https://discord.gg/prefech</h3>
+### ❓ For more questions you can join the discord here: https://discord.gg/prefech
