@@ -159,7 +159,7 @@ function GetPlayerDetails(src, config, channel)
         if channel ~= 'joins' then
             _playerID ="\n**Player ID:** " ..src.."" 
         else
-            _playerID = "\n**Player ID: N/A"     
+            _playerID = "\n**Player ID:** N/A"     
         end
     else 
         _playerID = "" 
