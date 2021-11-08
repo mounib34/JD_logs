@@ -66,6 +66,7 @@ AddEventHandler("playerConnecting", function(name, setReason, deferrals)
     local ids = ExtractIdentifiers(source)
 
 	if ids.steam then
+		deferrals.update("Checking your steam name")
 		if loadedFile[ids.steam] ~= nil then 
 			if loadedFile[ids.steam] ~= GetPlayerName(source) then 
 				for _, i in ipairs(GetPlayers()) do
@@ -84,7 +85,7 @@ AddEventHandler("playerConnecting", function(name, setReason, deferrals)
 		deferrals.done()
 	else
 		if cfgFile.forceSteam then
-			deferrals.done(source, "Please start steam and reconnect to the server.")
+			deferrals.done("Please start steam and reconnect to the server.")
 		else
 			for _, i in ipairs(GetPlayers()) do
 				if IsPlayerAceAllowed(i, cfgFile.nameChangePerms) then 
