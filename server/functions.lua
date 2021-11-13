@@ -137,7 +137,7 @@ function GetPlayerDetails(src, config, channel)
     end
 
     if config.Session or config.PlayTime then
-        playtime = exports.Prefech_PlayTime:getPlayTime(src)
+        playtime = exports.Prefech_playTime:getPlayTime(src)
         if config.Session and channel ~= 'joins' then
             playTimeArgs = SecondsToClock(playtime.Session)
             _session = "\n**Session Time:** `"..string.format("%02d:%02d:%02d", playTimeArgs.hours, playTimeArgs.minutes, playTimeArgs.seconds)..'`'
