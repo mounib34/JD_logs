@@ -38,7 +38,7 @@ exports('discord', function(msg, player_1, player_2, color, channel)
 		args['player_2_id'] = player_2
 	end
 	ServerFunc.CreateLog(args)
-	log('Server Old Export: '.. table.concat(args, "; "))
+	DebugLog('Server Old Export: '.. table.concat(args, "; "))
 end)
 
 exports('createLog', function(args)
@@ -50,7 +50,7 @@ exports('createLog', function(args)
 	else
 		ServerFunc.CreateLog(args)
 	end
-	log('Server New Export: '.. table.concat(args, "; "))
+	DebugLog('Server New Export: '.. table.concat(args, "; "))
 end)
 
 -- Event Handlers
@@ -107,7 +107,9 @@ end)
 
 -- Send message when Player creates a chat message (Does not show commands)
 AddEventHandler('chatMessage', function(source, name, msg)
-	ServerFunc.CreateLog({EmbedMessage = '**'..GetPlayerName(source) .. '**: `' .. msg..'`', player_id = source, channel = 'chat'})
+	if string.sub(msg, 1, 1) ~= '/' then
+		ServerFunc.CreateLog({EmbedMessage = '**'..GetPlayerName(source) .. '**: `' .. msg..'`', player_id = source, channel = 'chat'})
+	end
 end)
 
 -- Send message when Player died (including reason/killer check) (Not always working)
@@ -168,7 +170,7 @@ end)
 AddEventHandler('onResourceStart', function (resourceName)
     Citizen.Wait(100)
 	ServerFunc.CreateLog({EmbedMessage = '**' .. resourceName .. '** has been started.', channel = 'resources'})
-end)
+end)  
 
 local storage = nil
 RegisterNetEvent('Prefech:sendClientLogStorage')
@@ -228,17 +230,13 @@ function tablelength(T)
 	return count
 end
 
-if GetCurrentResourceName() ~= "JD_logs" then
-    log('This recource should be named "JD_logs" for the exports to work properly.')
-end
-
 RegisterNetEvent('Prefech:JD_logs:Debug')
 AddEventHandler('Prefech:JD_logs:Debug', log)
 
 RegisterNetEvent('Prefech:JD_logs:Debug')
 AddEventHandler('Prefech:JD_logs:Debug', errorLog)
 
-function log(x)
+function DebugLog(x)
 	if JD_Debug then
 		print("^5[JD_logs]^0 " .. x)
 	end
@@ -248,6 +246,10 @@ function errorLog(x)
 	if JD_Debug then
 		print("^5[JD_logs]^1 " .. x)
 	end
+end
+
+if GetCurrentResourceName() ~= "JD_logs" then
+    DebugLog('This recource should be named "JD_logs" for the exports to work properly.')
 end
 
 -- version check
