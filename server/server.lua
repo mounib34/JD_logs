@@ -38,7 +38,7 @@ exports('discord', function(msg, player_1, player_2, color, channel)
 		args['player_2_id'] = player_2
 	end
 	ServerFunc.CreateLog(args)
-	TriggerEvent('Prefech:JD_logs:Debug', 'Server Old Export', args)
+	log('Server Old Export: '.. table.concat(args, "; "))
 end)
 
 exports('createLog', function(args)
@@ -50,7 +50,7 @@ exports('createLog', function(args)
 	else
 		ServerFunc.CreateLog(args)
 	end
-	TriggerEvent('Prefech:JD_logs:Debug', 'Server New Export', args)
+	log('Server New Export: '.. table.concat(args, "; "))
 end)
 
 -- Event Handlers
@@ -228,18 +228,27 @@ function tablelength(T)
 	return count
 end
 
+if GetCurrentResourceName() ~= "JD_logs" then
+    log('This recource should be named "JD_logs" for the exports to work properly.')
+end
+
 RegisterNetEvent('Prefech:JD_logs:Debug')
-AddEventHandler('Prefech:JD_logs:Debug', function(msg, err)
+AddEventHandler('Prefech:JD_logs:Debug', log)
+
+RegisterNetEvent('Prefech:JD_logs:Debug')
+AddEventHandler('Prefech:JD_logs:Debug', errorLog)
+
+function log(x)
 	if JD_Debug then
-		print("^1 Error: JD_logs"..msg.."^0")
-		for k,v in pairs(err) do
-			print("^1"..k.."^0")
-		   for k,v in pairs(v) do
-				print("^1"..k.."^0", v)
-		   end
-		end
+		print("^5[JD_logs]^0 " .. x)
 	end
-end)
+end
+
+function errorLog(x)
+	if JD_Debug then
+		print("^5[JD_logs]^1 " .. x)
+	end
+end
 
 -- version check
 Citizen.CreateThread( function()
