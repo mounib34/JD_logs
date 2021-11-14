@@ -72,15 +72,18 @@ ServerFunc.getStatus = function(status, channel)
 end
 
 function GetPlayerDetails(src, config, channel)
+    local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
+	local webhooksFile = json.decode(webhooksLaodFile)
+
     local ids = ExtractIdentifiers(src)
-	if config['postals'] then
+	if config['postals'] and not webhooksFile[channel].Hide['Postal'] then
         postal = getPlayerLocation(src)
         _postal = "\n**Nearest Postal:** ".. postal ..""
     else
         _postal = ""
     end
 
-    if config['discordId'] then
+    if config['discordId'] and not webhooksFile[channel].Hide['DiscordID']then
         if ids.discord then
             _discordID ="\n**Discord ID:** <@" ..ids.discord:gsub("discord:", "")..">"
         else
@@ -91,7 +94,7 @@ function GetPlayerDetails(src, config, channel)
     end
 
     if GetConvar("steam_webApiKey", "false") ~= 'false' then
-        if config['steamId'] then 
+        if config['steamId'] and not webhooksFile[channel].Hide['SteamID'] then 
             if ids.steam then 
                 _steamID ="\n**Steam ID:** " ..ids.steam.."" 
             else 
@@ -101,7 +104,7 @@ function GetPlayerDetails(src, config, channel)
             _steamID = "" 
         end
         
-        if config['steamUrl'] then 
+        if config['steamUrl'] and not webhooksFile[channel].Hide['SteamURL'] then 
             if ids.steam then 
                 _steamURL ="\nhttps://steamcommunity.com/profiles/" ..tonumber(ids.steam:gsub("steam:", ""),16).."" 
             else 
@@ -116,7 +119,7 @@ function GetPlayerDetails(src, config, channel)
         TriggerEvent('Prefech:JD_logs:errorLog', 'You need to set a steam api key in your server.cfg for the steam identifiers to work!.')
     end
  
-	if config['license'] then 
+	if config['license'] and not webhooksFile[channel].Hide['License'] then 
         if ids.license then 
             _license ="\n**License:** " ..ids.license
         else 
@@ -126,7 +129,7 @@ function GetPlayerDetails(src, config, channel)
         _license = "" 
     end
 
-	if config['ip'] then 
+	if config['ip'] and not webhooksFile[channel].Hide['IP'] then 
         if ids.ip then 
             _ip ="\n**IP:** " ..ids.ip:gsub("ip:", "")
         else 
@@ -136,7 +139,7 @@ function GetPlayerDetails(src, config, channel)
         _ip = "" 
     end
 
-    if config.Session or config.PlayTime then
+    if config.Session or config.PlayTime and not webhooksFile[channel].Hide['PlayTime'] then
         if GetResourceState('Prefech_playTime') == "started" then
             playtime = exports.Prefech_playTime:getPlayTime(src)
             if config.Session and channel ~= 'joins' then
@@ -161,7 +164,7 @@ function GetPlayerDetails(src, config, channel)
         _session = ""
     end
 
-	if config['playerId'] then 
+	if config['playerId'] and not webhooksFile[channel].Hide['PlayerID'] then 
         if channel ~= 'joins' then
             _playerID ="\n**Player ID:** " ..src.."" 
         else

@@ -172,7 +172,7 @@ AddEventHandler('explosionEvent', function(source, ev)
     else
         ev.explosionType = explosionTypes[ev.explosionType + 1]
     end
-    ServerFunc.CreateLog({EmbedMessage = '**' .. GetPlayerName(source)  .. '** created a explosion `' .. ev.explosionType .. '`', player_id = source, channel = 'explotion'})
+    ServerFunc.CreateLog({EmbedMessage = '**' .. GetPlayerName(source)  .. '** created a explosion `' .. ev.explosionType .. '`', player_id = source, channel = 'explosion'})
 end)
 
 -- Getting exports from clientside
