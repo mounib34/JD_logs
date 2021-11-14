@@ -13,7 +13,23 @@
     #####################################################################
 ]]
 
-local JD_Debug = false -- Enable when you have issues or when asked by Prefech DevTeam
+local JD_Debug = false -- Enable when you have issues or when asked by Prefech Staff
+
+RegisterNetEvent('Prefech:JD_logs:Debug')
+AddEventHandler('Prefech:JD_logs:Debug', log)
+
+RegisterNetEvent('Prefech:JD_logs:Debug')
+AddEventHandler('Prefech:JD_logs:Debug', errorLog)
+
+function debugLog(x)
+	if JD_Debug then
+		print("^5[JD_logs]^0 " .. x)
+	end
+end
+
+function errorLog(x)
+	print("^5[JD_logs]^1 " .. x .."^0")
+end
 
 RegisterNetEvent("Prefech:discordLogs")
 AddEventHandler("Prefech:discordLogs", function(message, color, channel)
@@ -38,7 +54,7 @@ exports('discord', function(msg, player_1, player_2, color, channel)
 		args['player_2_id'] = player_2
 	end
 	ServerFunc.CreateLog(args)
-	DebugLog('Server Old Export: '.. table.concat(args, "; "))
+	debugLog('Server Old Export: '.. table.concat(args, "; "))
 end)
 
 exports('createLog', function(args)
@@ -50,7 +66,7 @@ exports('createLog', function(args)
 	else
 		ServerFunc.CreateLog(args)
 	end
-	DebugLog('Server New Export: '.. table.concat(args, "; "))
+	debugLog('Server New Export: '.. table.concat(args, "; "))
 end)
 
 -- Event Handlers
@@ -230,26 +246,19 @@ function tablelength(T)
 	return count
 end
 
-RegisterNetEvent('Prefech:JD_logs:Debug')
-AddEventHandler('Prefech:JD_logs:Debug', log)
-
-RegisterNetEvent('Prefech:JD_logs:Debug')
-AddEventHandler('Prefech:JD_logs:Debug', errorLog)
-
-function DebugLog(x)
-	if JD_Debug then
-		print("^5[JD_logs]^0 " .. x)
-	end
-end
-
-function errorLog(x)
-	if JD_Debug then
-		print("^5[JD_logs]^1 " .. x)
+local eventsLoadFile = LoadResourceFile(GetCurrentResourceName(), "json/eventLogs.json")
+local eventsFile = json.decode(eventsLoadFile)
+for k,v in pairs(eventsFile) do
+	if v.Server then
+		debugLog('Added Server Event Log: '..v.Event)
+		AddEventHandler(v.Event, function()
+			ServerFunc.CreateLog({EmbedMessage = '**EventLogger:** '..v.Message, channel = v.Channel})
+		end)
 	end
 end
 
 if GetCurrentResourceName() ~= "JD_logs" then
-    DebugLog('This recource should be named "JD_logs" for the exports to work properly.')
+    errorLog('This recource should be named "JD_logs" for the exports to work properly.')
 end
 
 -- version check

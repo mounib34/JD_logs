@@ -157,6 +157,17 @@ AddEventHandler('Prefech:getClientLogStorage', function()
     TriggerServerEvent('Prefech:sendClientLogStorage', clientStorage)
 end)
 
+local eventsLoadFile = LoadResourceFile(GetCurrentResourceName(), "json/eventLogs.json")
+local eventsFile = json.decode(eventsLoadFile)
+for k,v in pairs(eventsFile) do
+	if not v.Server then
+		TriggerServerEvent('Prefech:JD_logs:Debug', 'Added Client Event Log: '..v.Event)
+		AddEventHandler(v.Event, function()
+			ServerFunc.CreateLog({EmbedMessage = 'EventLogger: '..v.Message, channel = v.Channel})
+		end)
+	end
+end
+
 function tablelength(T)
 	local count = 0
 	for _ in pairs(T) do count = count + 1 end

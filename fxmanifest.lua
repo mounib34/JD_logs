@@ -31,5 +31,9 @@ client_scripts {
     'client/weapons.lua'
 }
 
+files {
+    'json/eventLogs.json'
+}
+
 game 'gta5'
 fx_version 'cerulean'
