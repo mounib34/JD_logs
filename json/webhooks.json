@@ -51,5 +51,11 @@
         "icon": "⚠", 
         "color": "#03FC98",
         "embed": true
+    },
+    "explotion": {
+        "webhook": "DISCORD_WEBHOOK", 
+        "icon": "🧨", 
+        "color": "#03FC98",
+        "embed": true
     }
 }

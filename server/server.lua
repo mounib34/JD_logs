@@ -77,8 +77,8 @@ AddEventHandler("playerConnecting", function(name, setReason, deferrals)
 
 	local loadFile = LoadResourceFile(GetCurrentResourceName(), "./json/names.json")
 	local loadedFile = json.decode(loadFile)
-	local conaifFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
-	local cfgFile = json.decode(conaifFile)
+	local configFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
+	local cfgFile = json.decode(configFile)
     local ids = ExtractIdentifiers(source)
 
 	if ids.steam then
@@ -162,6 +162,17 @@ AddEventHandler('Prefech:playerShotWeapon', function(weapon)
 	if configFile['weaponLog'] then
 		ServerFunc.CreateLog({EmbedMessage = '**' .. GetPlayerName(source)  .. '** fired a `' .. weapon .. '`', player_id = source, channel = 'shooting'})
     end
+end)
+
+local explosionTypes = {'GRENADE', 'GRENADELAUNCHER', 'STICKYBOMB', 'MOLOTOV', 'ROCKET', 'TANKSHELL', 'HI_OCTANE', 'CAR', 'PLANE', 'PETROL_PUMP', 'BIKE', 'DIR_STEAM', 'DIR_FLAME', 'DIR_WATER_HYDRANT', 'DIR_GAS_CANISTER', 'BOAT', 'SHIP_DESTROY', 'TRUCK', 'BULLET', 'SMOKEGRENADELAUNCHER', 'SMOKEGRENADE', 'BZGAS', 'FLARE', 'GAS_CANISTER', 'EXTINGUISHER', 'PROGRAMMABLEAR', 'TRAIN', 'BARREL', 'PROPANE', 'BLIMP', 'DIR_FLAME_EXPLODE', 'TANKER', 'PLANE_ROCKET', 'VEHICLE_BULLET', 'GAS_TANK', 'BIRD_CRAP', 'RAILGUN', 'BLIMP2', 'FIREWORK', 'SNOWBALL', 'PROXMINE', 'VALKYRIE_CANNON', 'AIR_DEFENCE', 'PIPEBOMB', 'VEHICLEMINE', 'EXPLOSIVEAMMO', 'APCSHELL', 'BOMB_CLUSTER', 'BOMB_GAS', 'BOMB_INCENDIARY', 'BOMB_STANDARD', 'TORPEDO', 'TORPEDO_UNDERWATER', 'BOMBUSHKA_CANNON', 'BOMB_CLUSTER_SECONDARY', 'HUNTER_BARRAGE', 'HUNTER_CANNON', 'ROGUE_CANNON', 'MINE_UNDERWATER', 'ORBITAL_CANNON', 'BOMB_STANDARD_WIDE', 'EXPLOSIVEAMMO_SHOTGUN', 'OPPRESSOR2_CANNON', 'MORTAR_KINETIC', 'VEHICLEMINE_KINETIC', 'VEHICLEMINE_EMP', 'VEHICLEMINE_SPIKE', 'VEHICLEMINE_SLICK', 'VEHICLEMINE_TAR', 'SCRIPT_DRONE', 'RAYGUN', 'BURIEDMINE', 'SCRIPT_MISSIL'}
+
+AddEventHandler('explosionEvent', function(source, ev)
+    if ev.explosionType < -1 or ev.explosionType > 77 then
+        ev.explosionType = 'UNKNOWN'
+    else
+        ev.explosionType = explosionTypes[ev.explosionType + 1]
+    end
+    ServerFunc.CreateLog({EmbedMessage = '**' .. GetPlayerName(source)  .. '** created a explotion `' .. ev.explosionType .. '`', player_id = source, channel = 'explotion'})
 end)
 
 -- Getting exports from clientside
