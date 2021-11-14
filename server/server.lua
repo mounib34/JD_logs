@@ -18,8 +18,8 @@ local JD_Debug = false -- Enable when you have issues or when asked by Prefech S
 RegisterNetEvent('Prefech:JD_logs:Debug')
 AddEventHandler('Prefech:JD_logs:Debug', log)
 
-RegisterNetEvent('Prefech:JD_logs:Debug')
-AddEventHandler('Prefech:JD_logs:Debug', errorLog)
+RegisterNetEvent('Prefech:JD_logs:errorLog')
+AddEventHandler('Prefech:JD_logs:errorLog', errorLog)
 
 function debugLog(x)
 	if JD_Debug then
@@ -172,7 +172,7 @@ AddEventHandler('explosionEvent', function(source, ev)
     else
         ev.explosionType = explosionTypes[ev.explosionType + 1]
     end
-    ServerFunc.CreateLog({EmbedMessage = '**' .. GetPlayerName(source)  .. '** created a explotion `' .. ev.explosionType .. '`', player_id = source, channel = 'explotion'})
+    ServerFunc.CreateLog({EmbedMessage = '**' .. GetPlayerName(source)  .. '** created a explosion `' .. ev.explosionType .. '`', player_id = source, channel = 'explotion'})
 end)
 
 -- Getting exports from clientside
@@ -208,46 +208,50 @@ end)
 RegisterCommand('logs', function(source, args, RawCommand)
 	local configFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
 	local cfgFile = json.decode(configFile)
-	if IsPlayerAceAllowed(source, cfgFile.logHistoryPerms) then
-		if tonumber(args[1]) then
-			TriggerClientEvent('Prefech:getClientLogStorage', args[1])
-			Citizen.Wait(500)
-			if tablelength(storage) == 0 then
-				exports.Prefech_Notify:Notify({
-					title = "Recent logs for: "..GetPlayerName(args[1]).." (0)",
-					message = "No logs avalible.",
-					color = "#93CAED",
-					target = source,
-					timeout = 15
-				})
-			else
-				for k,v in pairs(storage) do
+	if GetResourceState('Prefech_Notify') == "started" then
+		if IsPlayerAceAllowed(source, cfgFile.logHistoryPerms) then
+			if tonumber(args[1]) then
+				TriggerClientEvent('Prefech:getClientLogStorage', args[1])
+				Citizen.Wait(500)
+				if tablelength(storage) == 0 then
 					exports.Prefech_Notify:Notify({
-						title = "Recent logs for: "..GetPlayerName(args[1]).." ("..k..")",
-						message = "Channel: "..v.Channel.."\nMessage: "..v.Message:gsub("**",""):gsub("`","").."\nTimeStamp: "..v.TimeStamp,
+						title = "Recent logs for: "..GetPlayerName(args[1]).." (0)",
+						message = "No logs avalible.",
 						color = "#93CAED",
 						target = source,
 						timeout = 15
 					})
+				else
+					for k,v in pairs(storage) do
+						exports.Prefech_Notify:Notify({
+							title = "Recent logs for: "..GetPlayerName(args[1]).." ("..k..")",
+							message = "Channel: "..v.Channel.."\nMessage: "..v.Message:gsub("**",""):gsub("`","").."\nTimeStamp: "..v.TimeStamp,
+							color = "#93CAED",
+							target = source,
+							timeout = 15
+						})
+					end
 				end
+			else
+				exports.Prefech_Notify:Notify({
+					title = "Error!",
+					message = "Invalid player ID",
+					color = "#93CAED",
+					target = source,
+					timeout = 15
+				})
 			end
 		else
 			exports.Prefech_Notify:Notify({
 				title = "Error!",
-				message = "Invalid player ID",
+				message = "You don't have permission to use this command",
 				color = "#93CAED",
 				target = source,
 				timeout = 15
 			})
 		end
 	else
-		exports.Prefech_Notify:Notify({
-			title = "Error!",
-			message = "You don't have permission to use this command",
-			color = "#93CAED",
-			target = source,
-			timeout = 15
-		})
+		errorLog('Prefech_Notify is not installed.')
 	end
 end)
 

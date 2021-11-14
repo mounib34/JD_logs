@@ -113,7 +113,7 @@ function GetPlayerDetails(src, config, channel)
     else
         _steamID = ""
         _steamURL = ""
-        print('^1Error: You need to set a steam api key in your server.cfg for the steam identifiers to work!^0')
+        TriggerEvent('Prefech:JD_logs:errorLog', 'You need to set a steam api key in your server.cfg for the steam identifiers to work!.')
     end
  
 	if config['license'] then 
@@ -137,18 +137,24 @@ function GetPlayerDetails(src, config, channel)
     end
 
     if config.Session or config.PlayTime then
-        playtime = exports.Prefech_playTime:getPlayTime(src)
-        if config.Session and channel ~= 'joins' then
-            playTimeArgs = SecondsToClock(playtime.Session)
-            _session = "\n**Session Time:** `"..string.format("%02d:%02d:%02d", playTimeArgs.hours, playTimeArgs.minutes, playTimeArgs.seconds)..'`'
+        if GetResourceState('Prefech_playTime') == "started" then
+            playtime = exports.Prefech_playTime:getPlayTime(src)
+            if config.Session and channel ~= 'joins' then
+                playTimeArgs = SecondsToClock(playtime.Session)
+                _session = "\n**Session Time:** `"..string.format("%02d:%02d:%02d", playTimeArgs.hours, playTimeArgs.minutes, playTimeArgs.seconds)..'`'
+            else
+                _session = ""
+            end
+            if config.PlayTime and channel ~= 'joins' then
+                playTimeArgs = SecondsToClock(playtime.Total + playtime.Session)
+                _total = "\n**Total Time:** `"..string.format("%d days and %02d:%02d:%02d", playTimeArgs.days, playTimeArgs.hours, playTimeArgs.minutes, playTimeArgs.seconds)..'`'
+            else
+                _total = ""
+            end
         else
-            _session = ""
-        end
-        if config.PlayTime and channel ~= 'joins' then
-            playTimeArgs = SecondsToClock(playtime.Total + playtime.Session)
-            _total = "\n**Total Time:** `"..string.format("%d days and %02d:%02d:%02d", playTimeArgs.days, playTimeArgs.hours, playTimeArgs.minutes, playTimeArgs.seconds)..'`'
-        else
+            TriggerEvent('Prefech:JD_logs:errorLog', 'Prefech_playTime is not installed.')
             _total = ""
+            _session = ""
         end
     else
         _total = ""
