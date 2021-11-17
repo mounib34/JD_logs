@@ -113,7 +113,17 @@ Citizen.CreateThread(function()
 		local playerped = GetPlayerPed(PlayerId())
 		if IsPedShooting(playerped) then
 			if ClientWeapons.WeaponNames[tostring(GetSelectedPedWeapon(playerped))] then
-				TriggerServerEvent('Prefech:playerShotWeapon', ClientWeapons.WeaponNames[tostring(GetSelectedPedWeapon(playerped))])
+				local configFile = LoadResourceFile(GetCurrentResourceName(), "json/config.json")
+				local cfgFile = json.decode(configFile)
+				isLoggedWeapon = true
+				for k,v in pairs(cfgFile['WeaponsNotLogged']) do
+				   	if GetSelectedPedWeapon(playerped) == GetHashKey(v) then
+						isLoggedWeapon = false
+					end
+				end
+				if isLoggedWeapon then
+					TriggerServerEvent('Prefech:playerShotWeapon', ClientWeapons.WeaponNames[tostring(GetSelectedPedWeapon(playerped))])
+				end				
 			else
 				TriggerServerEvent('Prefech:playerShotWeapon', 'Undefined')
 				TriggerServerEvent('Prefech:JD_logs:Debug', 'Weapon not defined.', "Weapon not listed: "..tostring(GetSelectedPedWeapon(playerped)))

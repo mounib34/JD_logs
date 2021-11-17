@@ -26,5 +26,10 @@
     "footerText": "2020 - 2021 © Prefech",
     "footerIcon": "https://via.placeholder.com/30x30",
 
-    "Version": "2.1.2"
+    "WeaponsNotLogged": [
+        "WEAPON_SNOWBALL",
+        "WEAPON_FIREEXTINGUISHER"
+    ],
+
+    "Version": "2.1.3"
 }

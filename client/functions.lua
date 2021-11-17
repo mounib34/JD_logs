@@ -159,6 +159,15 @@ ClientFunc.hashToWeapon = function(hash)
 	return weapons[hash]
 end
 
+ClientFunc.has_value = function(tab, val)
+    for i, v in ipairs (tab) do
+        if (v == val) then
+            return true
+        end
+    end
+    return false
+end
+
 --Debug shizzels :D
 ClientFunc.ShowDebug = function(text)
 	SetNotificationTextEntry("STRING")

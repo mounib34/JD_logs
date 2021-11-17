@@ -15,7 +15,7 @@
 
 author 'Prefech'
 description 'FXServer logs to Discord (https://prefech.com/)'
-version '2.1.2'
+version '2.1.3'
 url 'https://prefech.com'
 
 -- Server Scripts
@@ -32,7 +32,8 @@ client_scripts {
 }
 
 files {
-    'json/eventLogs.json'
+    'json/eventLogs.json',
+    'json/config.json'
 }
 
 game 'gta5'
