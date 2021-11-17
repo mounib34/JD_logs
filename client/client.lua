@@ -31,8 +31,6 @@ Citizen.CreateThread(function()
 				Killer = NetworkGetPlayerIndexFromPed(GetPedInVehicleSeat(PedKiller, -1))
 			end
 
-			print(Killer, PlayerId())
-
 			if (Killer == PlayerId()) then
 				DeathReason = 'committed suicide'
 			elseif (Killer == nil) then
