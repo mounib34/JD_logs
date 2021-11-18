@@ -1,6 +1,6 @@
 {
     "all": { 
-        "webhook": "https://canary.discord.com/api/webhooks/909514227935502476/LG3iLuXPxoMlthktyR2BYHAzuR4DOrz7aElaUI7HBkihM9dFe2en7UaSFmswV-WKT-jl",
+        "webhook": "DISCORD_WEBHOOK",
         "color": "#A1A1A1",
         "embed": true
     },
