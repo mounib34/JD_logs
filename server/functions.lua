@@ -200,19 +200,23 @@ ServerFunc.CreateLog = function(args)
     --[[
         This is just to get the version check on discord!
     ]]
-    if args['type'] == 'Update' then
+    if args['channel'] == 'system' then
+        if args['type'] == 'Update' then
+            description = "**JD_logs Update V"..args['file'].version.."**\nDownload the latest update of JD_logs here:\nhttps://github.com/prefech/JD_logs/releases/latest\n\n**Changelog:**\n"..args['file'].changelog
+        end
+
         message = {
             userName = "📢 Prefech",
             content = "@everyone",
             embeds = {{
-                ["color"] = 3092790, 
+                ["color"] = 3092790,
                 ["author"] = {
-                    ["name"] = "Prefech System",
+                    ["name"] = "Prefech",
                     ["icon_url"] = "https://prefech.com/i/DiscordIcon.png",
                     ["url"] = "https://discord.gg/prefech"
                 },
                 ["title"] = "📢 SYSTEM",
-                ["description"] = "**JD_logs Update V"..args['file'].version.."**\nDownload the latest update of JD_logs here:\nhttps://github.com/prefech/JD_logs/releases/latest\n\n**Changelog:**\n"..args['file'].changelog,
+                ["description"] = description,
                 ["footer"] = {
                     ["text"] = "Prefech.com • "..os.date("%x %X %p"),
                     ["icon_url"] = "https://prefech.com/i/DiscordIcon.png",
@@ -220,6 +224,7 @@ ServerFunc.CreateLog = function(args)
             }}, 
             avatar_url = "https://prefech.com/i/DiscordIcon.png"
         }
+
         if webhooksFile['system'].webhook ~= "DISCORD_WEBHOOK" and webhooksFile['system'].webhook ~= "" then
             return sendWebhooks({messageToDeliver = message, channel = 'system'})
         else
