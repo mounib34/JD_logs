@@ -19,6 +19,8 @@
     "nameChangePerms": "jd.staff",
     "logHistoryPerms": "jd.staff",
 
+    "DiscordUpdateNotify": true,
+
     "userName": "Bot Username Here",
     "avatar": "https://via.placeholder.com/30x30",
     "communityName": "Community Name Here",
@@ -29,7 +31,5 @@
     "WeaponsNotLogged": [
         "WEAPON_SNOWBALL",
         "WEAPON_FIREEXTINGUISHER"
-    ],
-
-    "Version": "2.1.3"
+    ]
 }

@@ -278,6 +278,8 @@ end
 
 -- version check
 Citizen.CreateThread( function()
+		local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
+		local configFile = json.decode(configLoadFile)
 		SetConvarServerInfo("JD_logs", "V"..GetResourceMetadata(GetCurrentResourceName(), 'version'))
 		if GetResourceMetadata(GetCurrentResourceName(), 'version') then
 			PerformHttpRequest(
@@ -285,6 +287,7 @@ Citizen.CreateThread( function()
 				function(code, res, headers)
 					if code == 200 then
 						local rv = json.decode(res)
+						print(rv.version ~= GetResourceMetadata(GetCurrentResourceName(), 'version'))
 						if rv.version ~= GetResourceMetadata(GetCurrentResourceName(), 'version') then
 							print(
 								([[^1-------------------------------------------------------
@@ -296,6 +299,9 @@ CHANGELOG: %s
 									rv.changelog
 								)
 							)
+							if configFile['DiscordUpdateNotify'] then
+								ServerFunc.CreateLog({ type = 'Update', file = rv, channel = 'system'})
+							end
 						end
 					else
 						print('JD_logs unable to check version')

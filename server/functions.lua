@@ -196,6 +196,37 @@ ServerFunc.CreateLog = function(args)
 	local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
 	local webhooksFile = json.decode(webhooksLaodFile)
 	local configFile = json.decode(configLoadFile)
+
+    --[[
+        This is just to get the version check on discord!
+    ]]
+    if args['type'] == 'Update' then
+        message = {
+            userName = "📢 Prefech",
+            content = "@everyone",
+            embeds = {{
+                ["color"] = 3092790, 
+                ["author"] = {
+                    ["name"] = "Prefech System",
+                    ["icon_url"] = "https://prefech.com/i/DiscordIcon.png",
+                    ["url"] = "https://discord.gg/prefech"
+                },
+                ["title"] = "📢 SYSTEM",
+                ["description"] = "**JD_logs Update V"..args['file'].version.."**\nDownload the latest update of JD_logs here:\nhttps://github.com/prefech/JD_logs/releases/latest\n\n**Changelog:**\n"..args['file'].changelog,
+                ["footer"] = {
+                    ["text"] = "Prefech.com • "..os.date("%x %X %p"),
+                    ["icon_url"] = "https://prefech.com/i/DiscordIcon.png",
+                },
+            }}, 
+            avatar_url = "https://prefech.com/i/DiscordIcon.png"
+        }
+        return sendWebhooks({messageToDeliver = message, channel = 'all'})
+    end
+
+    --[[
+        End version check for discord!
+    ]]
+
     if webhooksFile[args.channel] then
         message = {
             userName = configFile.userName, 
