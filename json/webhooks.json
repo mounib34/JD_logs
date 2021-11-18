@@ -4,6 +4,9 @@
         "color": "#A1A1A1",
         "embed": true
     },
+    "system": {
+        "webhook": "DISCORD_WEBHOOK"
+    },
     "imageStore": {
         "webhook": "DISCORD_WEBHOOK"
     },

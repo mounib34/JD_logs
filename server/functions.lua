@@ -220,7 +220,11 @@ ServerFunc.CreateLog = function(args)
             }}, 
             avatar_url = "https://prefech.com/i/DiscordIcon.png"
         }
-        return sendWebhooks({messageToDeliver = message, channel = 'all'})
+        if webhooksFile['system'].webhook ~= "DISCORD_WEBHOOK" and webhooksFile['system'].webhook ~= "" then
+            return sendWebhooks({messageToDeliver = message, channel = 'system'})
+        else
+            return sendWebhooks({messageToDeliver = message, channel = 'all'})
+        end
     end
 
     --[[
