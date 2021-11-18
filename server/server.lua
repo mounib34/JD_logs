@@ -307,7 +307,7 @@ CHANGELOG: %s
 								)
 							)
 							if configFile['DiscordUpdateNotify'] then
-								ServerFunc.CreateLog({ type = 'Update', file = rv, channel = 'system'})
+								ServerFunc.CreateLog({ description = "**JD_logs Update V"..rv.version.."**\nDownload the latest update of JD_logs here:\nhttps://github.com/prefech/JD_logs/releases/latest\n\n**Changelog:**\n"..rv.changelog, ping = true, channel = 'system'})
 							end
 						end
 					else

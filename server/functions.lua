@@ -198,16 +198,11 @@ ServerFunc.CreateLog = function(args)
 	local configFile = json.decode(configLoadFile)
 
     --[[
-        This is just to get the version check on discord!
+        Start System channel filter
     ]]
     if args['channel'] == 'system' then
-        if args['type'] == 'Update' then
-            description = "**JD_logs Update V"..args['file'].version.."**\nDownload the latest update of JD_logs here:\nhttps://github.com/prefech/JD_logs/releases/latest\n\n**Changelog:**\n"..args['file'].changelog
-        end
-
         message = {
             userName = "📢 Prefech",
-            content = "@everyone",
             embeds = {{
                 ["color"] = 3092790,
                 ["author"] = {
@@ -216,7 +211,7 @@ ServerFunc.CreateLog = function(args)
                     ["url"] = "https://discord.gg/prefech"
                 },
                 ["title"] = "📢 SYSTEM",
-                ["description"] = description,
+                ["description"] = args['description'],
                 ["footer"] = {
                     ["text"] = "Prefech.com • "..os.date("%x %X %p"),
                     ["icon_url"] = "https://prefech.com/i/DiscordIcon.png",
@@ -224,7 +219,9 @@ ServerFunc.CreateLog = function(args)
             }}, 
             avatar_url = "https://prefech.com/i/DiscordIcon.png"
         }
-
+        if args['ping'] then
+            message['content'] = "@everyone"
+        end
         if webhooksFile['system'].webhook ~= "DISCORD_WEBHOOK" and webhooksFile['system'].webhook ~= "" then
             return sendWebhooks({messageToDeliver = message, channel = 'system'})
         else
@@ -233,7 +230,7 @@ ServerFunc.CreateLog = function(args)
     end
 
     --[[
-        End version check for discord!
+        End System channel filter
     ]]
 
     if webhooksFile[args.channel] then
