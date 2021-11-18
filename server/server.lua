@@ -59,10 +59,14 @@ end)
 
 exports('createLog', function(args)
 	if args.screenshot then
-		local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
-		local webhooksFile = json.decode(webhooksLaodFile)
-		args['url'] = webhooksFile['imageStore'].webhook
-		TriggerClientEvent('Prefech:ClientCreateScreenshot', args.player_id, args)
+		if GetResourceState('screenshot-basic') == "started" then
+			local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
+			local webhooksFile = json.decode(webhooksLaodFile)
+			args['url'] = webhooksFile['imageStore'].webhook
+			TriggerClientEvent('Prefech:ClientCreateScreenshot', args.player_id, args)
+		else
+			errorLog('You need to have screenshot-basic to use screenshot logs.')
+		end
 	else
 		ServerFunc.CreateLog(args)
 	end
@@ -179,10 +183,14 @@ end)
 RegisterServerEvent('Prefech:ClientDiscord')
 AddEventHandler('Prefech:ClientDiscord', function(args)
 	if args.screenshot then
-		local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
-		local webhooksFile = json.decode(webhooksLaodFile)
-		args['url'] = webhooksFile['imageStore'].webhook
-		TriggerClientEvent('Prefech:ClientCreateScreenshot', args.player_id, args)
+		if GetResourceState('screenshot-basic') == "started" then
+			local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
+			local webhooksFile = json.decode(webhooksLaodFile)
+			args['url'] = webhooksFile['imageStore'].webhook
+			TriggerClientEvent('Prefech:ClientCreateScreenshot', args.player_id, args)
+		else
+			errorLog('You need to have screenshot-basic to use screenshot logs.')
+		end
 	else
 		ServerFunc.CreateLog(args)
 	end
@@ -287,7 +295,6 @@ Citizen.CreateThread( function()
 				function(code, res, headers)
 					if code == 200 then
 						local rv = json.decode(res)
-						print(rv.version ~= GetResourceMetadata(GetCurrentResourceName(), 'version'))
 						if rv.version ~= GetResourceMetadata(GetCurrentResourceName(), 'version') then
 							print(
 								([[^1-------------------------------------------------------
