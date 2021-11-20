@@ -1,5 +1,5 @@
 {
     "date": "Nov 18, 2021",
-    "version": "2.1.3",
+    "version": "2.1.4",
     "changelog": "Added:\n• Option to disable logs for certain weapons.\n• Update notify to all logs channel."
 }
