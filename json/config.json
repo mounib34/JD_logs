@@ -9,6 +9,7 @@
     "steamUrl": true,
     "discordId": true,
     "license": true,
+    "license2": true,
     "ip": true,
 
     "Session": false,

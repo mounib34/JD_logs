@@ -129,6 +129,16 @@ function GetPlayerDetails(src, config, channel)
         _license = "" 
     end
 
+    if config['license2'] and not webhooksFile[channel].Hide['License2'] then 
+        if ids.license2 then 
+            _license2 ="\n**License 2:** " ..ids.license2
+        else 
+            _license2 = "\n**License 2:** N/A" 
+        end 
+    else 
+        _license2 = "" 
+    end
+
 	if config['ip'] and not webhooksFile[channel].Hide['IP'] then 
         if ids.ip then 
             _ip ="\n**IP:** " ..ids.ip:gsub("ip:", "")
@@ -174,7 +184,7 @@ function GetPlayerDetails(src, config, channel)
         _playerID = "" 
     end
 
-    return _playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._session..''.._total..''.._ip
+    return _playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._license2..''.._session..''.._total..''.._ip
 end
 
 function SecondsToClock(seconds)
@@ -317,17 +327,19 @@ function ExtractIdentifiers(src)
     for i = 0, GetNumPlayerIdentifiers(src) - 1 do
         local id = GetPlayerIdentifier(src, i)
 
-        if string.find(id, "steam") then
+        if string.find(id, "steam:") then
             identifiers['steam'] = id
-        elseif string.find(id, "ip") then
+        elseif string.find(id, "ip:") then
             identifiers['ip'] = id
-        elseif string.find(id, "discord") then
+        elseif string.find(id, "discord:") then
             identifiers['discord'] = id
-        elseif string.find(id, "license") then
+        elseif string.find(id, "license:") then
             identifiers['license'] = id
-        elseif string.find(id, "xbl") then
+        elseif string.find(id, "license2:") then
+            identifiers['license2'] = id
+        elseif string.find(id, "xbl:") then
             identifiers['xbl'] = id
-        elseif string.find(id, "live") then
+        elseif string.find(id, "live:") then
             identifiers['live'] = id
         end
     end

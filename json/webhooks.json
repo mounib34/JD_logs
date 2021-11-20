@@ -23,6 +23,7 @@
             "Postal": false,
             "DiscordID": false,
             "License": false,
+            "License2": false,
             "IP": false,
             "PlayTime": false
         }
@@ -39,6 +40,7 @@
             "Postal": false,
             "DiscordID": false,
             "License": false,
+            "License2": false,
             "IP": false,
             "PlayTime": false
         }
@@ -55,6 +57,7 @@
             "Postal": false,
             "DiscordID": false,
             "License": false,
+            "License2": false,
             "IP": false,
             "PlayTime": false
         }
@@ -72,6 +75,7 @@
             "Postal": false,
             "DiscordID": false,
             "License": false,
+            "License2": false,
             "IP": false,
             "PlayTime": false
         }
@@ -89,6 +93,7 @@
             "Postal": false,
             "DiscordID": false,
             "License": false,
+            "License2": false,
             "IP": false,
             "PlayTime": false
         }
@@ -105,6 +110,7 @@
             "Postal": false,
             "DiscordID": false,
             "License": false,
+            "License2": false,
             "IP": false,
             "PlayTime": false
         }
@@ -121,6 +127,7 @@
             "Postal": false,
             "DiscordID": false,
             "License": false,
+            "License2": false,
             "IP": false,
             "PlayTime": false
         }
@@ -137,6 +144,7 @@
             "Postal": false,
             "DiscordID": false,
             "License": false,
+            "License2": false,
             "IP": false,
             "PlayTime": false
         }
