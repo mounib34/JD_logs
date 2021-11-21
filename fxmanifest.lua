@@ -32,8 +32,8 @@ client_scripts {
 }
 
 files {
-    'json/eventLogs.json',
-    'json/config.json'
+    'config/eventLogs.json',
+    'config/config.json'
 }
 
 game 'gta5'

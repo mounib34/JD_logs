@@ -66,7 +66,9 @@ function GetTitle(channel, icon)
 end
 
 ServerFunc.getStatus = function(status, channel)
-	if status == 404 or status == 401 and Config.webhooks[channel] ~= "DISCORD_WEBHOOK" and Config.webhooks[channel] ~= "" then 
+    local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./config/webhooks.json")
+	local webhooksFile = json.decode(webhooksLaodFile)
+	if status == 404 or status == 401 and webhooksFile[channel].webhook ~= "DISCORD_WEBHOOK" and webhooksFile[channel].webhook ~= "" then 
 		print('^3Warn: JD_logs webhook. Possible invalid webhook for "'..channel..'" webhook. Status code: '..status)
 	end
 end
