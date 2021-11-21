@@ -1,8 +1,0 @@
-{
-    "TemplateEvent": {
-        "Event": "chatMessage",
-        "Message": "This is a test event",
-        "Channel": "chat",
-        "Server": true
-    }
-}    

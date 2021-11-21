@@ -111,7 +111,7 @@ Citizen.CreateThread(function()
 		local playerped = GetPlayerPed(PlayerId())
 		if IsPedShooting(playerped) then
 			if ClientWeapons.WeaponNames[tostring(GetSelectedPedWeapon(playerped))] then
-				local configFile = LoadResourceFile(GetCurrentResourceName(), "json/config.json")
+				local configFile = LoadResourceFile(GetCurrentResourceName(), "config/config.json")
 				local cfgFile = json.decode(configFile)
 				isLoggedWeapon = true
 				for k,v in pairs(cfgFile['WeaponsNotLogged']) do
@@ -167,7 +167,7 @@ AddEventHandler('Prefech:getClientLogStorage', function()
     TriggerServerEvent('Prefech:sendClientLogStorage', clientStorage)
 end)
 
-local eventsLoadFile = LoadResourceFile(GetCurrentResourceName(), "json/eventLogs.json")
+local eventsLoadFile = LoadResourceFile(GetCurrentResourceName(), "config/eventLogs.json")
 local eventsFile = json.decode(eventsLoadFile)
 for k,v in pairs(eventsFile) do
 	if not v.Server then

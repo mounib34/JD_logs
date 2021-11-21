@@ -60,7 +60,7 @@ end)
 exports('createLog', function(args)
 	if args.screenshot then
 		if GetResourceState('screenshot-basic') == "started" then
-			local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
+			local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./config/webhooks.json")
 			local webhooksFile = json.decode(webhooksLaodFile)
 			args['url'] = webhooksFile['imageStore'].webhook
 			TriggerClientEvent('Prefech:ClientCreateScreenshot', args.player_id, args)
@@ -81,7 +81,7 @@ AddEventHandler("playerConnecting", function(name, setReason, deferrals)
 
 	local loadFile = LoadResourceFile(GetCurrentResourceName(), "./json/names.json")
 	local loadedFile = json.decode(loadFile)
-	local configFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
+	local configFile = LoadResourceFile(GetCurrentResourceName(), "./config/config.json")
 	local cfgFile = json.decode(configFile)
     local ids = ExtractIdentifiers(source)
 
@@ -161,7 +161,7 @@ end)
 -- Send message when Player fires a weapon
 RegisterServerEvent('Prefech:playerShotWeapon')
 AddEventHandler('Prefech:playerShotWeapon', function(weapon)
-	local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
+	local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./config/config.json")
 	local configFile = json.decode(configLoadFile)
 	if configFile['weaponLog'] then
 		ServerFunc.CreateLog({EmbedMessage = '**' .. GetPlayerName(source)  .. '** fired a `' .. weapon .. '`', player_id = source, channel = 'shooting'})
@@ -184,7 +184,7 @@ RegisterServerEvent('Prefech:ClientDiscord')
 AddEventHandler('Prefech:ClientDiscord', function(args)
 	if args.screenshot then
 		if GetResourceState('screenshot-basic') == "started" then
-			local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
+			local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./config/webhooks.json")
 			local webhooksFile = json.decode(webhooksLaodFile)
 			args['url'] = webhooksFile['imageStore'].webhook
 			TriggerClientEvent('Prefech:ClientCreateScreenshot', args.player_id, args)
@@ -214,7 +214,7 @@ AddEventHandler('Prefech:sendClientLogStorage', function(_storage)
 end)
 
 RegisterCommand('logs', function(source, args, RawCommand)
-	local configFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
+	local configFile = LoadResourceFile(GetCurrentResourceName(), "./config/config.json")
 	local cfgFile = json.decode(configFile)
 	if GetResourceState('Prefech_Notify') == "started" then
 		if IsPlayerAceAllowed(source, cfgFile.logHistoryPerms) then
@@ -269,7 +269,7 @@ function tablelength(T)
 	return count
 end
 
-local eventsLoadFile = LoadResourceFile(GetCurrentResourceName(), "json/eventLogs.json")
+local eventsLoadFile = LoadResourceFile(GetCurrentResourceName(), "config/eventLogs.json")
 local eventsFile = json.decode(eventsLoadFile)
 for k,v in pairs(eventsFile) do
 	if v.Server then
@@ -291,7 +291,7 @@ end
 
 -- version check
 Citizen.CreateThread( function()
-		local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
+		local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./config/config.json")
 		local configFile = json.decode(configLoadFile)
 		SetConvarServerInfo("JD_logs", "V"..GetResourceMetadata(GetCurrentResourceName(), 'version'))
 		if GetResourceMetadata(GetCurrentResourceName(), 'version') then

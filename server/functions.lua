@@ -20,7 +20,7 @@ ServerFunc.ConvertColor = function(channel)
 end
 
 function ConvertColor(channel)
-    local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
+    local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./config/webhooks.json")
 	local webhooksFile = json.decode(webhooksLaodFile)
     if webhooksFile[channel] then
         src = webhooksFile[channel].color
@@ -39,7 +39,7 @@ ServerFunc.sendWebhooks = function(load)
 end
 
 function sendWebhooks(load)
-    local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
+    local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./config/webhooks.json")
 	local webhooksFile = json.decode(webhooksLaodFile)
     
     if webhooksFile[load.channel] then
@@ -72,7 +72,7 @@ ServerFunc.getStatus = function(status, channel)
 end
 
 function GetPlayerDetails(src, config, channel)
-    local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
+    local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./config/webhooks.json")
 	local webhooksFile = json.decode(webhooksLaodFile)
 
     local ids = ExtractIdentifiers(src)
@@ -202,8 +202,8 @@ ServerFunc.GetPlayerDetails = function(src, config, channel)
 end
 
 ServerFunc.CreateLog = function(args)
-    local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./json/webhooks.json")
-	local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./json/config.json")
+    local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./config/webhooks.json")
+	local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./config/config.json")
 	local webhooksFile = json.decode(webhooksLaodFile)
 	local configFile = json.decode(configLoadFile)
 

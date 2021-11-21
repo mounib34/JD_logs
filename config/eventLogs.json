@@ -1,0 +1,8 @@
+{
+    "TemplateEvent": {
+        "Event": "NotEvent",
+        "Message": "This is a placeholder event",
+        "Channel": "channel forom webhooks.json",
+        "Server": true
+    }
+}    
