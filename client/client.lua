@@ -174,6 +174,7 @@ for k,v in pairs(eventsFile) do
 		TriggerServerEvent('Prefech:JD_logs:Debug', 'Added Client Event Log: '..v.Event)
 		AddEventHandler(v.Event, function()
 			ServerFunc.CreateLog({EmbedMessage = 'EventLogger: '..v.Message, channel = v.Channel})
+			TriggerServerEvent('Prefech:eventLoggerClient', {EmbedMessage = 'EventLogger: '..v.Message, channel = v.Channel})
 		end)
 	end
 end

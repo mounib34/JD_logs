@@ -280,6 +280,11 @@ for k,v in pairs(eventsFile) do
 	end
 end
 
+RegisterServerEvent('Prefech:eventLoggerClient')
+AddEventHandler('Prefech:eventLoggerClient', function(args)
+	ServerFunc.CreateLog(args)
+end)
+
 if GetCurrentResourceName() ~= "JD_logs" then
     errorLog('This recource should be named "JD_logs" for the exports to work properly.')
 end
