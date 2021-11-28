@@ -143,12 +143,14 @@ exports('discord', function(message, id, id2, color, channel)
 		args['player_2_id'] = player_2
 	end
 	TriggerServerEvent('Prefech:ClientDiscord', args)
-	TriggerServerEvent('Prefech:JD_logs:Debug', 'Server Old Export', args)
+	local resource = GetInvokingResource()
+	TriggerServerEvent('Prefech:JD_logs:Debug', 'Server Old Export from '..resource)
 end)
 
 exports('createLog', function(args)
-	TriggerServerEvent('Prefech:ClientDiscord', args)
-	TriggerServerEvent('Prefech:JD_logs:Debug', 'Server New Export', args)
+	TriggerServerEvent('Prefech:ClientDiscord', args)	
+	local resource = GetInvokingResource()
+	TriggerServerEvent('Prefech:JD_logs:Debug', 'Server New Export from '..resource)
 end)
 
 local clientStorage = {}

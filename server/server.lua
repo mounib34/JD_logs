@@ -54,7 +54,8 @@ exports('discord', function(msg, player_1, player_2, color, channel)
 		args['player_2_id'] = player_2
 	end
 	ServerFunc.CreateLog(args)
-	debugLog('Server Old Export: '.. table.concat(args, "; "))
+	local resource = GetInvokingResource()
+	debugLog('Server Old Export from '.. resource)
 end)
 
 exports('createLog', function(args)
@@ -70,7 +71,8 @@ exports('createLog', function(args)
 	else
 		ServerFunc.CreateLog(args)
 	end
-	debugLog('Server New Export: '.. table.concat(args, "; "))
+	local resource = GetInvokingResource()
+	debugLog('Server New Export from: '..resource)
 end)
 
 -- Event Handlers
