@@ -25,7 +25,8 @@
             "License": false,
             "License2": false,
             "IP": false,
-            "PlayTime": false
+            "PlayTime": false,
+            "playerPing": true
         }
     },
 	"joins": { 
@@ -42,7 +43,8 @@
             "License": false,
             "License2": false,
             "IP": false,
-            "PlayTime": false
+            "PlayTime": false,
+            "playerPing": true
         }
     },
 	"leaving": { 
@@ -59,7 +61,8 @@
             "License": false,
             "License2": false,
             "IP": false,
-            "PlayTime": false
+            "PlayTime": false,
+            "playerPing": true
         }
     },
 	"deaths": { 
@@ -77,7 +80,8 @@
             "License": false,
             "License2": false,
             "IP": false,
-            "PlayTime": false
+            "PlayTime": false,
+            "playerPing": true
         }
     },
 	"shooting": { 
@@ -95,7 +99,8 @@
             "License": false,
             "License2": false,
             "IP": false,
-            "PlayTime": false
+            "PlayTime": false,
+            "playerPing": true
         }
     },
 	"resources": { 
@@ -112,7 +117,8 @@
             "License": false,
             "License2": false,
             "IP": false,
-            "PlayTime": false
+            "PlayTime": false,
+            "playerPing": false
         }
     },
     "nameChange": { 
@@ -129,7 +135,8 @@
             "License": false,
             "License2": false,
             "IP": false,
-            "PlayTime": false
+            "PlayTime": false,
+            "playerPing": true
         }
     },
     "explosion": {
@@ -146,7 +153,8 @@
             "License": false,
             "License2": false,
             "IP": false,
-            "PlayTime": false
+            "PlayTime": false,
+            "playerPing": true
         }
     }
 }

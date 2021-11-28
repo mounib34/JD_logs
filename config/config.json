@@ -11,6 +11,7 @@
     "license": true,
     "license2": true,
     "ip": true,
+    "playerPing": true,
 
     "Session": false,
     "PlayTime": false,

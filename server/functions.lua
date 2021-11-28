@@ -186,6 +186,12 @@ function GetPlayerDetails(src, config, channel)
         _playerID = "" 
     end
 
+    if config['playerPing'] and not webhooksFile[channel].Hide['playerPing'] then
+        _ping = "\n**Ping:** `"..GetPlayerPing(src)..'ms`'
+    else
+        _ping = ""
+    end
+
     return _playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._license2..''.._session..''.._total..''.._ip
 end
 
