@@ -293,8 +293,8 @@ end
 Citizen.CreateThread( function()
 		local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./config/config.json")
 		local configFile = json.decode(configLoadFile)
-		SetConvarServerInfo("JD_logs", "V"..GetResourceMetadata(GetCurrentResourceName(), 'version'))
 		if GetResourceMetadata(GetCurrentResourceName(), 'version') then
+			SetConvar("JD_logs", "V"..GetResourceMetadata(GetCurrentResourceName(), 'version'))
 			PerformHttpRequest(
 				'https://raw.githubusercontent.com/Prefech/JD_logs/master/json/version.json',
 				function(code, res, headers)
@@ -321,6 +321,9 @@ CHANGELOG: %s
 				end,
 				'GET'
 			)
+			
+		else
+			print('JD_logs unable to check version')
 		end
 	end
 )

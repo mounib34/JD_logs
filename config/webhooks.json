@@ -133,7 +133,7 @@
         }
     },
     "explosion": {
-        "webhook": "https://canary.discord.com/api/webhooks/831839555039526940/WBoXbR3h3NKTtYqFt1_QFQoffrCbJZctLoCeN2UpMxDsEL6uFpsOEPu7AG0x0pzAmiBw", 
+        "webhook": "DISCORD_WEBHOOK", 
         "icon": "🧨", 
         "color": "#03FC98",
         "embed": true,
