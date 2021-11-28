@@ -13,10 +13,10 @@
     #####################################################################
 ]]
 
+version '2.1.5'
 author 'Prefech'
 description 'FXServer logs to Discord (https://prefech.com/)'
-version '2.1.5'
-url 'https://prefech.com'
+repository 'https://github.com/prefech/JD_logs'
 
 -- Server Scripts
 server_scripts {
