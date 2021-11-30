@@ -1,5 +1,5 @@
 {
     "date": "Nov 20, 2021",
     "version": "2.1.5",
-    "changelog": "Added:\n• License2 support.\n• Player Ping\n• Added /screenshot Command.\n\nFixes:\n• Minor fixes and improvements"
+    "changelog": "Added:\n• License2 support.\n• Player Ping\n• Added /screenshot Command.\n\nChanged:\n• Moved config file, webhooks file and events file to config folder.\n• Disabled version checker for beta versions.\n\nFixes:\n• Minor fixes and improvements"
 }
