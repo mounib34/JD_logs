@@ -330,12 +330,14 @@ end
 
 local eventsLoadFile = LoadResourceFile(GetCurrentResourceName(), "config/eventLogs.json")
 local eventsFile = json.decode(eventsLoadFile)
-for k,v in pairs(eventsFile) do
-	if v.Server then
-		debugLog('Added Server Event Log: '..v.Event)
-		AddEventHandler(v.Event, function()
-			ServerFunc.CreateLog({EmbedMessage = '**EventLogger:** '..v.Message, channel = v.Channel})
-		end)
+if type(eventsFile) == "table" then
+	for k,v in pairs(eventsFile) do
+		if v.Server then
+			debugLog('Added Server Event Log: '..v.Event)
+			AddEventHandler(v.Event, function()
+				ServerFunc.CreateLog({EmbedMessage = '**EventLogger:** '..v.Message, channel = v.Channel})
+			end)
+		end
 	end
 end
 
