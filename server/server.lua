@@ -265,10 +265,67 @@ RegisterCommand('logs', function(source, args, RawCommand)
 	end
 end)
 
+RegisterCommand('screenshot', function(source, args, RawCommand)
+	local configFile = LoadResourceFile(GetCurrentResourceName(), "./config/config.json")
+	local cfgFile = json.decode(configFile)
+	if GetResourceState('Prefech_Notify') == "started" then
+		if IsPlayerAceAllowed(source, cfgFile.screenshotPerms) then
+			if args[1] and has_val(GetPlayers(), args[1]) then
+				if GetResourceState('screenshot-basic') == "started" then
+					local webhooksLaodFile = LoadResourceFile(GetCurrentResourceName(), "./config/webhooks.json")
+					local webhooksFile = json.decode(webhooksLaodFile)
+					args['url'] = webhooksFile['imageStore'].webhook
+					args['EmbedMessage'] = "**Screenshot of:** "..GetPlayerName(args[1]).." (ID: "..args[1]..")\n**Requested by:** "..GetPlayerName(source).." (ID: "..source..")"
+					args['channel'] = "screenshot"
+					TriggerClientEvent('Prefech:ClientCreateScreenshot', args[1], args)
+					exports.Prefech_Notify:Notify({
+						title = "Success!",
+						message = "The screenshot of "..GetPlayerName(args[1]).." was posted on discord!",
+						color = "#93CAED",
+						target = source,
+						timeout = 15
+					})
+				else
+					errorLog('You need to have screenshot-basic to use screenshot logs.')
+				end
+			else
+				exports.Prefech_Notify:Notify({
+					title = "Error!",
+					message = "The player ID provided is invalid or not a active player.",
+					color = "#93CAED",
+					target = source,
+					timeout = 15
+				})
+
+			end
+		else
+			exports.Prefech_Notify:Notify({
+				title = "Error!",
+				message = "You don't have permission to use this command",
+				color = "#93CAED",
+				target = source,
+				timeout = 15
+			})
+		end
+	else
+		errorLog('Prefech_Notify is not installed.')
+	end
+end)
+
 function tablelength(T)
 	local count = 0
 	for _ in pairs(T) do count = count + 1 end
 	return count
+end
+
+
+function has_val(tab, val)
+	for k,v in pairs(tab) do
+	   if v == val then
+		return true
+	   end
+	end
+	return false
 end
 
 local eventsLoadFile = LoadResourceFile(GetCurrentResourceName(), "config/eventLogs.json")

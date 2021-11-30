@@ -99,7 +99,7 @@ end)
 RegisterNetEvent('Prefech:ClientCreateScreenshot')
 AddEventHandler('Prefech:ClientCreateScreenshot', function(args)
     exports['screenshot-basic']:requestScreenshotUpload(args.url, 'files[]', function(data)
-        local resp = json.decode(data)		
+        local resp = json.decode(data)
 		args['responseUrl'] = resp.attachments[1].url
         TriggerServerEvent('Prefech:ClientUploadScreenshot', args)
     end)

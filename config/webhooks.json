@@ -156,5 +156,24 @@
             "PlayTime": false,
             "playerPing": true
         }
+    },
+    "screenshot": { 
+        "webhook": "DISCORD_WEBHOOK", 
+        "icon": "📸", 
+        "color": "#A1A1A1",
+        "logHistory": false,
+        "embed": true,
+        "Hide": {
+            "PlayerID": false,
+            "SteamID": false,
+            "SteamURL": false,
+            "Postal": false,
+            "DiscordID": false,
+            "License": false,
+            "License2": false,
+            "IP": false,
+            "PlayTime": false,
+            "playerPing": false
+        }
     }
 }

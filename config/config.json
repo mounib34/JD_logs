@@ -20,6 +20,7 @@
 
     "nameChangePerms": "jd.staff",
     "logHistoryPerms": "jd.staff",
+    "screenshotPerms": "jd.staff",
 
     "DiscordUpdateNotify": true,
 
