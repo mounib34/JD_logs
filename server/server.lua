@@ -78,9 +78,10 @@ end)
 -- Event Handlers
 -- Send message when Player connects to the server.
 AddEventHandler("playerConnecting", function(name, setReason, deferrals)
-	deferrals.defer()
 	ServerFunc.CreateLog({EmbedMessage = '**' ..GetPlayerName(source).. '** is connecting to the server.', player_id = source, channel = 'joins'})
+end)
 
+AddEventHandler("playerJoining", function(source, oldID)
 	local loadFile = LoadResourceFile(GetCurrentResourceName(), "./json/names.json")
 	local loadedFile = json.decode(loadFile)
 	local configFile = LoadResourceFile(GetCurrentResourceName(), "./config/config.json")
@@ -88,7 +89,6 @@ AddEventHandler("playerConnecting", function(name, setReason, deferrals)
     local ids = ExtractIdentifiers(source)
 
 	if ids.steam then
-		deferrals.update("Checking your steam name")
 		if loadedFile[ids.steam] ~= nil then 
 			if loadedFile[ids.steam] ~= GetPlayerName(source) then 
 				for _, i in ipairs(GetPlayers()) do
@@ -99,15 +99,15 @@ AddEventHandler("playerConnecting", function(name, setReason, deferrals)
 						})
 					end
 				end
-				ServerFunc.CreateLog({EmbedMessage = 'Player **' .. GetPlayerName(source) .. '** used to be named **' ..loadedFile[ids.steam]..'**', player_id = source, channel = 'NameChange'})
+				ServerFunc.CreateLog({EmbedMessage = 'Player **' .. GetPlayerName(source) .. '** used to be named **' ..loadedFile[ids.steam]..'**', player_id = source, channel = 'nameChange'})
 			end
 		end
 		loadedFile[ids.steam] = GetPlayerName(source)
 		SaveResourceFile(GetCurrentResourceName(), "./json/names.json", json.encode(loadedFile), -1)
-		deferrals.done()
 	else
 		if cfgFile.forceSteam then
-			deferrals.done("Please start steam and reconnect to the server.")
+			ServerFunc.CreateLog({EmbedMessage = 'Disonnected player **' .. GetPlayerName(source) .. '** for not having steam active.', player_id = source, channel = 'nameChange'})
+			DropPlayer(source, "Please start steam and reconnect to the server.")
 		else
 			for _, i in ipairs(GetPlayers()) do
 				if IsPlayerAceAllowed(i, cfgFile.nameChangePerms) then 
@@ -117,7 +117,7 @@ AddEventHandler("playerConnecting", function(name, setReason, deferrals)
 					})
 				end
 			end
-			deferrals.done()
+			ServerFunc.CreateLog({EmbedMessage = 'Player **' .. GetPlayerName(source) .. '** does not have steam active and we can\'t log their name.', player_id = source, channel = 'nameChange'})
 		end
 	end
 end)
