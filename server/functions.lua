@@ -231,7 +231,7 @@ ServerFunc.CreateLog = function(args)
                 ["title"] = "📢 SYSTEM",
                 ["description"] = args['description'],
                 ["footer"] = {
-                    ["text"] = "Prefech.com • "..os.date("%x %X %p"),
+                    ["text"] = "2020 - "..os.date("%Y").." © Prefech • "..os.date("%x %X %p"),
                     ["icon_url"] = "https://prefech.com/i/DiscordIcon.png",
                 },
             }}, 

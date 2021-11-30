@@ -352,37 +352,45 @@ end
 Citizen.CreateThread( function()
 		local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./config/config.json")
 		local configFile = json.decode(configLoadFile)
-		if GetResourceMetadata(GetCurrentResourceName(), 'version') then
-			SetConvar("JD_logs", "V"..GetResourceMetadata(GetCurrentResourceName(), 'version'))
-			PerformHttpRequest(
-				'https://raw.githubusercontent.com/Prefech/JD_logs/master/json/version.json',
-				function(code, res, headers)
-					if code == 200 then
-						local rv = json.decode(res)
-						if rv.version ~= GetResourceMetadata(GetCurrentResourceName(), 'version') then
-							print(
-								([[^1-------------------------------------------------------
-JD_logs
-UPDATE: %s AVAILABLE
-CHANGELOG: %s
--------------------------------------------------------^0]]):format(
-									rv.version,
-									rv.changelog
+		local version = GetResourceMetadata(GetCurrentResourceName(), 'version')
+		if not string.find(version, "beta") then
+			if version then
+				SetConvar("JD_logs", "V"..version)
+				PerformHttpRequest(
+					'https://raw.githubusercontent.com/Prefech/JD_logs/master/json/version.json',
+					function(code, res, headers)
+						if code == 200 then
+							local rv = json.decode(res)
+							if rv.version ~= version then
+								print(
+									([[^1-------------------------------------------------------
+	JD_logs
+	UPDATE: %s AVAILABLE
+	CHANGELOG: %s
+	-------------------------------------------------------^0]]):format(
+										rv.version,
+										rv.changelog
+									)
 								)
-							)
-							if configFile['DiscordUpdateNotify'] then
-								ServerFunc.CreateLog({ description = "**JD_logs Update V"..rv.version.."**\nDownload the latest update of JD_logs here:\nhttps://github.com/prefech/JD_logs/releases/latest\n\n**Changelog:**\n"..rv.changelog, ping = true, channel = 'system'})
+								if configFile['DiscordUpdateNotify'] then
+									ServerFunc.CreateLog({ description = "**JD_logs Update V"..rv.version.."**\nDownload the latest update of JD_logs here:\nhttps://github.com/prefech/JD_logs/releases/latest\n\n**Changelog:**\n"..rv.changelog, ping = true, channel = 'system'})
+								end
 							end
+						else
+							errorLog('JD_logs unable to check version')
 						end
-					else
-						print('JD_logs unable to check version')
-					end
-				end,
-				'GET'
-			)
-			
+					end,
+					'GET'
+				)
+				
+			else
+				errorLog('JD_logs unable to check version')
+			end
 		else
-			print('JD_logs unable to check version')
+			errorLog('Using the JD_logs beta version. (you might experience some issues using the beta version.)')
+			if configFile['DiscordUpdateNotify'] then
+				ServerFunc.CreateLog({ description = "**JD_logs Version checker disabled.**\nYou are using the beta version and therefore we disabled the version checker.\nTo get notifications about new updates join our discord: https://discord.gg/prefech", channel = 'system'})
+			end
 		end
 	end
 )
