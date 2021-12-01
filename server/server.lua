@@ -318,7 +318,6 @@ function tablelength(T)
 	return count
 end
 
-
 function has_val(tab, val)
 	for k,v in pairs(tab) do
 	   if v == val then
