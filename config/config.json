@@ -15,6 +15,9 @@
 
     "Session": false,
     "PlayTime": false,
+    "playerHealth": true,
+    "playerArmor": true,
+    "timestamp": true,
 
     "forceSteam": false,
 

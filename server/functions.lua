@@ -192,7 +192,42 @@ function GetPlayerDetails(src, config, channel)
         _ping = ""
     end
 
-    return _playerID..''.. _postal ..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._license2..''.._session..''.._total..''.._ip
+    if config['playerHealth'] or config['playerArmor'] then
+        local playerPed = GetPlayerPed(src)
+        if config['playerHealth'] and config['playerArmor'] then            
+            local maxHealth = GetEntityMaxHealth(playerPed)
+            local health = GetEntityHealth(playerPed)
+            if maxHealth == 200 then
+                correction = 100
+            else
+                correction = 0
+            end
+            local maxHealth = maxHealth - correction
+            local health = health - correction
+            local maxArmour = GetPlayerMaxArmour(src)
+            local armour = GetPedArmour(playerPed)
+            _hp = "\n**Health:** ❤: `"..health.."/"..maxHealth.."` **|** 🛡: `"..armour.."/"..maxArmour.."`"
+        elseif config['playerHealth'] then
+            local maxHealth = GetEntityMaxHealth(playerPed)
+            local health = GetEntityHealth(playerPed)
+            if maxHealth == 200 then
+                correction = 100
+            else
+                correction = 0
+            end
+            local maxHealth = maxHealth - correction
+            local health = health - correction
+            _hp = "\n**Health:** ❤: `"..health.."/"..maxHealth.."`"
+        elseif config['playerArmor'] then
+            local maxArmour = GetPlayerMaxArmour(src)
+            local armour = GetPedArmour(playerPed)
+            _hp = "\n**Health:** 🛡: `"..armour.."/"..maxArmour.."`"
+        end
+    else
+        _hp = ""
+    end
+
+    return _playerID..''.. _postal ..''.._hp..''.. _discordID..''.._steamID..''.._steamURL..''.._license..''.._license2..''.._session..''.._total..''.._ip
 end
 
 function SecondsToClock(seconds)
@@ -214,7 +249,6 @@ ServerFunc.CreateLog = function(args)
 	local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./config/config.json")
 	local webhooksFile = json.decode(webhooksLaodFile)
 	local configFile = json.decode(configLoadFile)
-
     --[[
         Start System channel filter
     ]]
@@ -294,6 +328,21 @@ ServerFunc.CreateLog = function(args)
                 ["value"] = Player_2_Details,
                 ["inline"] = configFile.inlineField
             }
+            if configFile['timestamp'] then
+                message['embeds'][1].fields[3]  = {
+                    ["name"] = "Timestamp:",
+                    ["value"] = "<t:".. math.floor(tonumber(os.time())) ..":R>",
+                    ["inline"] = false
+                }
+            end
+        else
+            if configFile['timestamp'] then
+                message['embeds'][1].fields[2]  = {
+                    ["name"] = "Timestamp:",
+                    ["value"] = "<t:".. math.floor(tonumber(os.time())) ..":R>",
+                    ["inline"] = false
+                }
+            end
         end
 
         if args.responseUrl then

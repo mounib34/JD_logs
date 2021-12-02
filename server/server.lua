@@ -129,9 +129,7 @@ end)
 
 -- Send message when Player creates a chat message (Does not show commands)
 AddEventHandler('chatMessage', function(source, name, msg)
-	if string.sub(msg, 1, 1) ~= '/' then
-		ServerFunc.CreateLog({EmbedMessage = '**'..GetPlayerName(source) .. '**: `' .. msg..'`', player_id = source, channel = 'chat'})
-	end
+	ServerFunc.CreateLog({EmbedMessage = '**'..GetPlayerName(source) .. '**: `' .. msg..'`', player_id = source, channel = 'chat'})
 end)
 
 -- Send message when Player died (including reason/killer check) (Not always working)
