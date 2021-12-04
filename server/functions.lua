@@ -43,8 +43,8 @@ function sendWebhooks(load)
 	local webhooksFile = json.decode(webhooksLaodFile)
     
     if webhooksFile[load.channel] then
-        PerformHttpRequest(webhooksFile[load.channel].webhook, function(err, text, headers) 
-            ServerFunc.getStatus(err, load.channel) 
+        PerformHttpRequest(webhooksFile[load.channel].webhook, function(err, text, headers)
+            ServerFunc.getStatus(err, load.channel)
         end, 'POST', json.encode(load.messageToDeliver), {
             ['Content-Type'] = 'application/json' 
         })
@@ -271,6 +271,9 @@ ServerFunc.CreateLog = function(args)
             }}, 
             avatar_url = "https://prefech.com/i/DiscordIcon.png"
         }
+        if args['isBanned'] then
+            message['embeds'][1]['title'] = "⛔ Global Banned"
+        end
         if args['ping'] then
             message['content'] = "@everyone"
         end
@@ -316,6 +319,13 @@ ServerFunc.CreateLog = function(args)
                     ["inline"] = configFile.inlineField
                 }
             }
+            if configFile['timestamp'] then
+                message['embeds'][1].fields[2]  = {
+                    ["name"] = "Timestamp:",
+                    ["value"] = "<t:".. math.floor(tonumber(os.time())) ..":R>",
+                    ["inline"] = false
+                }
+            end
         end
 
         if args.player_2_id then
@@ -335,14 +345,16 @@ ServerFunc.CreateLog = function(args)
                     ["inline"] = false
                 }
             end
-        else
-            if configFile['timestamp'] then
-                message['embeds'][1].fields[2]  = {
+        end
+
+        if not message['embeds'][1].fields then
+            message['embeds'][1].fields = {
+                {
                     ["name"] = "Timestamp:",
                     ["value"] = "<t:".. math.floor(tonumber(os.time())) ..":R>",
                     ["inline"] = false
                 }
-            end
+            }
         end
 
         if args.responseUrl then

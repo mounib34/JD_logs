@@ -1,5 +1,5 @@
 {
-    "date": "Dec 2, 2021",
-    "version": "2.1.5.2",
-    "changelog": "Added:\n• Table check to EventLogger.\n• Player Health and Armor levels.\n• Fancy Discord timestamp to embeds."
+    "date": "Dec 4, 2021",
+    "version": "2.1.5.3",
+    "changelog": "Added:\n• Global ban system.\n(Global bans will be synced on all servers using JD_logs)\n(You can disable global bans in the config)\n(You can add any identifier in `GlobalBanBypass` to bypass the global ban.)\n• System announcement for when a global banned player joins your server.\nFixed:\n• Small issue with thew new Timestamp."
 }

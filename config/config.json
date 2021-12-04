@@ -34,6 +34,9 @@
     "footerText": "2020 - 2021 © Prefech",
     "footerIcon": "https://via.placeholder.com/30x30",
 
+    "PrefechGlobalBans": true,
+    "GlobalBanBypass": [],
+
     "WeaponsNotLogged": [
         "WEAPON_SNOWBALL",
         "WEAPON_FIREEXTINGUISHER"

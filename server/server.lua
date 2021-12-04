@@ -78,6 +78,32 @@ end)
 -- Event Handlers
 -- Send message when Player connects to the server.
 AddEventHandler("playerConnecting", function(name, setReason, deferrals)
+	local ids = ExtractIdentifiers(source)
+	local bansLoadFile = LoadResourceFile(GetCurrentResourceName(), "./json/bans.json")
+	local bansFile = json.decode(bansLoadFile)
+	local configFile = LoadResourceFile(GetCurrentResourceName(), "./config/config.json")
+	local cfgFile = json.decode(configFile)
+	if cfgFile['PrefechGlobalBans'] then
+		bypass = false
+		for k,v in pairs(cfgFile['GlobalBanBypass']) do
+			if has_val(ids, v) then
+				bypass = true
+			end
+		end
+		if not bypass then
+			for k,v in pairs(bansFile) do
+				for a,b in pairs(ids) do
+					if has_val(v.Identifiers, b) then
+						if not v.Lifted then	
+							setReason('\nPrefech | Global Banned.\nReason: '..v.BanReason..'\nUUID: '..k..'\nTo appeal this ban please join our discord: https://discord.gg/prefech')
+							CancelEvent()
+							return ServerFunc.CreateLog({ description = '**' ..GetPlayerName(source).. '** tried to connect to your server but is global banned.\n**Ban UUID:** `'..k..'`\n**Ban reason:** `'..v.BanReason..'`', isBanned = true, channel = 'system'})
+						end
+					end
+				end
+			end
+		end
+	end	
 	ServerFunc.CreateLog({EmbedMessage = '**' ..GetPlayerName(source).. '** is connecting to the server.', player_id = source, channel = 'joins'})
 end)
 
@@ -346,6 +372,25 @@ end)
 if GetCurrentResourceName() ~= "JD_logs" then
     errorLog('This recource should be named "JD_logs" for the exports to work properly.')
 end
+
+function SyncBans()
+	PerformHttpRequest('https://prefech.com/jd_logs/globalbans.json', function(code, res, headers)
+		if code == 200 then
+			SaveResourceFile(GetCurrentResourceName(), "./json/bans.json", res, res.length)
+			debugLog('Bans synced')
+		else
+			errorLog('JD_logs unable to sync global bans')
+		end
+	end, 'GET')
+end
+
+Citizen.CreateThread(function()
+	SyncBans()
+	while true do
+		Citizen.Wait(15 * 60 * 1000)
+		SyncBans()
+	end
+end)
 
 -- version check
 Citizen.CreateThread( function()
