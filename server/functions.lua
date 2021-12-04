@@ -87,7 +87,7 @@ function GetPlayerDetails(src, config, channel)
 
     if config['discordId'] and not webhooksFile[channel].Hide['DiscordID']then
         if ids.discord then
-            _discordID ="\n**Discord ID:** <@" ..ids.discord:gsub("discord:", "")..">"
+            _discordID ="\n**Discord ID:** <@" ..ids.discord:gsub("discord:", "").."> ("..ids.discord:gsub("discord:", "")..")"
         else
             _discordID = "\n**Discord ID:** N/A"
         end

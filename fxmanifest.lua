@@ -13,7 +13,8 @@
     #####################################################################
 ]]
 
-version '2.1.5_beta'
+version '2.1.5.3'
+isbeta 'yes'
 author 'Prefech'
 description 'FXServer logs to Discord (https://prefech.com/)'
 repository 'https://github.com/prefech/JD_logs'
