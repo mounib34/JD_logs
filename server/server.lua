@@ -392,6 +392,22 @@ Citizen.CreateThread(function()
 	end
 end)
 
+RegisterNetEvent('Prefech:DropPlayer')
+AddEventHandler('Prefech:DropPlayer', function(reason)
+	local configFile = LoadResourceFile(GetCurrentResourceName(), "./config/ac_config.json")
+	local cfgFile = json.decode(configFile)
+	if not IsPlayerAceAllowed(source, cfgFile['AntiCheatBypass']) then
+		DropPlayer(source, 'Automated kick: '..reason)
+	end
+end)
+
+RegisterNetEvent('Prefech:getACConfig')
+AddEventHandler('Prefech:getACConfig', function()
+	local configFile = LoadResourceFile(GetCurrentResourceName(), "./config/ac_config.json")
+	local cfgFile = json.decode(configFile)
+	TriggerClientEvent('Prefech:SendACConfig', source, cfgFile)
+end)
+
 -- version check
 Citizen.CreateThread( function()
 	local configLoadFile = LoadResourceFile(GetCurrentResourceName(), "./config/config.json")

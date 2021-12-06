@@ -1,5 +1,5 @@
 {
-    "date": "Dec 4, 2021",
-    "version": "2.1.5.3",
-    "changelog": "Added:\n• update notify for beta version."
+    "date": "Dec 5, 2021",
+    "version": "2.1.5.4",
+    "changelog": "Added:\n• update notify for beta version.\n• Added AntiCheat functions.\n(BlacklistedVehicles - Vehicles that will be deleted up on use.)\n(BlacklistedObjects - Objects that will be deleted when they gey in player range.)\n(BlacklistedCommands - When someone injects a command into the server it will get detected.)\n(BlacklistedKeys - Will make a screenshot when the keys are pressed.)"
 }

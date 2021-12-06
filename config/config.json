@@ -24,6 +24,7 @@
     "nameChangePerms": "jd.staff",
     "logHistoryPerms": "jd.staff",
     "screenshotPerms": "jd.staff",
+    "AntiCheatBypass": "jd.staff",
 
     "DiscordUpdateNotify": true,
 
